@@ -7,7 +7,10 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-
+composeBom = "2025.09.01"
+activitycompose = "1.12.3"
+lifecycleviewmodelcompose = "2.10.0"
+navigationcompose = "2.9.7"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -15,6 +18,13 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+compose-bom = {group = "androidx.compose", name ="compose-bom", version.ref = "composeBom"}
+compose-ui = {group = "androidx.compose.ui", name = "ui"}
+compose-foundation = {group = "androidx.compose.foundation", name = "foundation"}
+compose-material = {group = "androidx.compose.material3", name = "material3"}
+activity-compose = {group = "androidx.activity", name = "activity-compose", version.ref = "activitycompose"}
+viewmodel-compose = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose",version.ref="lifecycleviewmodelcompose"}
+navigation-compose = {group = "androidx.navigation", name = "navigation-compose",version.ref="navigationcompose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
