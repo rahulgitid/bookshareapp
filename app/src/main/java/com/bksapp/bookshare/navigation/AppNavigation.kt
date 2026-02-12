@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bksapp.bookshare.ui.login.LoginScreen
+import com.bksapp.bookshare.ui.signup.SignUpScreen
 
 @Composable
 fun AppNavigation(){
@@ -16,7 +17,15 @@ fun AppNavigation(){
         composable(
             route = AppRoutes.Login.getRoute()
         ) {
-            LoginScreen()
+            LoginScreen{
+                navController.navigate(AppRoutes.Signup.getRoute())
+            }
+        }
+
+        composable(
+            route = AppRoutes.Signup.getRoute()
+        ) {
+            SignUpScreen()
         }
     }
 }

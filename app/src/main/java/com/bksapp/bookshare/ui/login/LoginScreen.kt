@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(clickLogin:()-> Unit) {
 
     var emailState by rememberSaveable { mutableStateOf("") }
     var passwordState by rememberSaveable { mutableStateOf("") }
@@ -92,7 +92,7 @@ fun LoginScreen() {
                 ElevatedButton(modifier = Modifier
                     .width(200.dp)
                     .height(50.dp),
-                    onClick = {},
+                    onClick = {clickLogin()},
                     contentPadding = PaddingValues(0.dp)) {
                     Box(
                         modifier = Modifier
