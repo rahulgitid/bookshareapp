@@ -33,13 +33,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginScreen(clickLogin:()-> Unit) {
 
-    var emailState by rememberSaveable { mutableStateOf("") }
-    var passwordState by rememberSaveable { mutableStateOf("") }
+
     val configuration = LocalWindowInfo.current.containerSize
+
+    val loginViewModel: LoginViewModel = viewModel()
+    val loginState = loginViewModel.loginState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
     Column(modifier = Modifier
@@ -63,9 +67,9 @@ fun LoginScreen(clickLogin:()-> Unit) {
                     .padding(10.dp),
                     horizontalArrangement = Arrangement.Center){
                     OutlinedTextField(
-                        value = emailState,
+                        value = loginState.value.email,
                         onValueChange = {email->
-                            emailState = email
+                           loginViewModel.validEmail(email)
                         },
                         label = {Text("Email", color = Color.Red)},
                         maxLines = 1
@@ -78,9 +82,9 @@ fun LoginScreen(clickLogin:()-> Unit) {
                     .padding(10.dp),
                     horizontalArrangement = Arrangement.Center){
                     OutlinedTextField(
-                        value = passwordState,
+                        value = loginState.value.password,
                         onValueChange = {password->
-                            passwordState = password
+                            loginViewModel.validPass(password)
                         },
                         label = {Text("Password", color = Color.Red)},
                         visualTransformation = PasswordVisualTransformation(),
@@ -89,12 +93,12 @@ fun LoginScreen(clickLogin:()-> Unit) {
                 }
 
                 Row(modifier = Modifier
-                    .fillMaxWidth()
-                    ,
+                    .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center) {
                     ElevatedButton(modifier = Modifier
                         .width(200.dp)
                         .height(50.dp),
+                        enabled = loginState.value.isValid,
                         onClick = {clickLogin()},
                         contentPadding = PaddingValues(0.dp)) {
                         Box(
