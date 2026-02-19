@@ -38,8 +38,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bksapp.bookshare.R
 import java.time.Instant
 import java.time.ZoneId
@@ -50,7 +50,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 
 fun SignUpScreen() {
-    val viewModel : SignupViewModel = viewModel()
+    val viewModel =  hiltViewModel<SignupViewModel>()
     val userDataState  = viewModel.signupState.collectAsStateWithLifecycle()
     var showDateDialog by remember { mutableStateOf(false) }
 
