@@ -11,6 +11,10 @@ composeBom = "2025.09.01"
 activitycompose = "1.12.3"
 lifecycleviewmodelcompose = "2.10.0"
 navigationcompose = "2.9.7"
+hilt = "2.57.1"
+kapt = "2.1.0"
+hilt-navigation = "1.2.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -25,8 +29,14 @@ compose-material = {group = "androidx.compose.material3", name = "material3"}
 activity-compose = {group = "androidx.activity", name = "activity-compose", version.ref = "activitycompose"}
 viewmodel-compose = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose",version.ref="lifecycleviewmodelcompose"}
 navigation-compose = {group = "androidx.navigation", name = "navigation-compose",version.ref="navigationcompose"}
+hilt = {group = "com.google.dagger",name="hilt-android",  version.ref = "hilt"}
+hilt-compiler = {group = "com.google.dagger",name = "hilt-android-compiler",version.ref ="hilt"}
+hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt-plug = {id = "com.google.dagger.hilt.android", version.ref = "hilt"}
+kapt-plug = {id = "kotlin-kapt"}

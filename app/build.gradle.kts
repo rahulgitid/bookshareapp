@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt.plug)
+    alias(libs.plugins.kapt.plug)
 }
 
 android {
@@ -54,6 +56,11 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.viewmodel.compose)
     implementation(libs.navigation.compose)
+
+    //Hilt
+    implementation(libs.hilt)
+    implementation(libs.hilt.navigation)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

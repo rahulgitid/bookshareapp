@@ -1,30 +1,19 @@
 package com.bksapp.bookshare.ui.signup
 
-import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 
-data class UserData(
-    val email : String = "",
-    val name : String = "",
-    val phone : String = "",
-    val dob : String = "",
-    val isValidEmail : Boolean = false,
-    val isValidName : Boolean = false,
-    val isValidPhone : Boolean = false,
-    val isValidDOB : Boolean = false,
-    val isValid : Boolean = false
-)
-
-
-class SignupViewModel : ViewModel()
+@HiltViewModel
+class SignupViewModel @Inject constructor(): ViewModel()
 {
-   private val _signupState = MutableStateFlow<UserData>(UserData())
-           val signupState : StateFlow<UserData> = _signupState.asStateFlow()
+   private val _signupState = MutableStateFlow(SignupState())
+           val signupState : StateFlow<SignupState> = _signupState.asStateFlow()
 
     fun updateEmail(email : String)
     {
