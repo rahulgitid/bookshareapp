@@ -49,7 +49,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 
-fun SignUpScreen() {
+fun SignUpScreen(navigateTo:()-> Unit) {
     val viewModel =  hiltViewModel<SignupViewModel>()
     val userDataState  = viewModel.signupState.collectAsStateWithLifecycle()
     var showDateDialog by remember { mutableStateOf(false) }
@@ -195,7 +195,7 @@ fun SignUpScreen() {
                     modifier = Modifier
                         .width(200.dp)
                         .height(50.dp),
-                    onClick = {},
+                    onClick = {navigateTo()},
                     enabled = userDataState.value.isValid
                     ) {
                     Text(stringResource(R.string.submit))
