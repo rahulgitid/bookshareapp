@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Scaffold
 import com.bksapp.bookshare.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,8 +21,10 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE,
       )
         setContent {
+            Scaffold { innerpading ->
+                AppNavigation(innerpading)
+            }
 
-            AppNavigation()
         }
     }
 }
