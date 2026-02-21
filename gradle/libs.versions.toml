@@ -1,19 +1,20 @@
 [versions]
-agp = "8.13.2"
-kotlin = "2.0.21"
+agp = "9.0.1"
+kotlin = "2.3.10"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-composeBom = "2025.09.01"
-activitycompose = "1.12.3"
+composeBom = "2026.02.00"
+activitycompose = "1.12.4"
 lifecycleviewmodelcompose = "2.10.0"
 navigationcompose = "2.9.7"
-hilt = "2.57.1"
-kapt = "2.1.0"
-hilt-navigation = "1.2.0"
+hilt = "2.59.1"
+ksp = "2.3.4"
+hilt-navigation = "1.3.0"
+constraint-compose = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,11 +33,11 @@ navigation-compose = {group = "androidx.navigation", name = "navigation-compose"
 hilt = {group = "com.google.dagger",name="hilt-android",  version.ref = "hilt"}
 hilt-compiler = {group = "com.google.dagger",name = "hilt-android-compiler",version.ref ="hilt"}
 hilt-navigation = {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation"}
-
+constraint_lay = {group = "androidx.constraintlayout",name = "constraintlayout-compose",version.ref="constraint-compose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-hilt-plug = {id = "com.google.dagger.hilt.android", version.ref = "hilt"}
-kapt-plug = {id = "kotlin-kapt"}
+hilt = {id = "com.google.dagger.hilt.android", version.ref = "hilt"}
+ksp = {id = "com.google.devtools.ksp",version.ref = "ksp"}
