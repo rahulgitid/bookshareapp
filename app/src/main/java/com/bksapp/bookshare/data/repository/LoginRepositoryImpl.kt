@@ -6,14 +6,14 @@ import com.bksapp.bookshare.domain.repository.LoginRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
-sealed class NetworkStatus{
-    object Idle : NetworkStatus()
-    object Loading : NetworkStatus()
-    data class Success(val user : User) : NetworkStatus()
-    data class Error(val error : String) : NetworkStatus()
+sealed class NetworkStatus<out T>{
+    object Idle : NetworkStatus<Nothing>()
+    object Loading : NetworkStatus<Nothing>()
+    data class Success<out T>(val data : T) : NetworkStatus<T>()
+    data class Error(val error : String) : NetworkStatus<Nothing>()
 }
 class LoginRepositoryImpl @Inject constructor() : LoginRepository {
-    override suspend fun getUser(email: String, pass: String): NetworkStatus {
+    override suspend fun getUser(email: String, pass: String): NetworkStatus<User> {
         val result =  callUser(email,pass)
         return if(result.email.isBlank()) {
             NetworkStatus.Error("No User Found")
