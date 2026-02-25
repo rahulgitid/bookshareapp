@@ -2,6 +2,7 @@ package com.bksapp.bookshare.ui.dashboard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,10 +36,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bksapp.bookshare.R
 import com.bksapp.bookshare.data.local.entity.Book
 import com.bksapp.bookshare.data.repository.NetworkStatus
+import com.bksapp.bookshare.utils.ImageLoader
 
 
 @Composable
-fun HomeScreen(){
+fun HomeScreen(showBookDetail : (book : Book)->Unit){
 
      val homeViewModel = hiltViewModel<HomeViewModel>()
      val bookState = homeViewModel.bookState.collectAsStateWithLifecycle()
@@ -65,7 +67,7 @@ fun HomeScreen(){
 
        if(bookState.value is NetworkStatus.Success){
            val books = bookState.value as NetworkStatus.Success<List<Book>>
-           BookList(books.data)
+           BookList(books.data,showBookDetail)
        }
        else if(bookState.value == NetworkStatus.Loading){
            Column(modifier = Modifier
@@ -86,18 +88,19 @@ fun HomeScreen(){
 }
 
 @Composable
-fun BookList(books: List<Book>){
+fun BookList(books: List<Book>,showBookDetail : (book : Book)->Unit){
     LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+
         ) {
         item(span = { GridItemSpan(maxLineSpan) }){
             Text(text= "Books")
         }
            items(items = books,key = {book->book.id}){ book->
-               BookDesign(book)
+               BookDesign(book,showBookDetail)
            }
         }
 
@@ -106,14 +109,19 @@ fun BookList(books: List<Book>){
 
 
 @Composable
-fun BookDesign(book: Book){
+fun BookDesign(book: Book,showBookDetail : (book : Book)->Unit){
 
-    Card {
+    Card(
+        onClick = {
+            showBookDetail(book)
+        }
+    ) {
         Column {
-            Image(modifier = Modifier.fillMaxWidth(),
+            /*Image(modifier = Modifier.fillMaxWidth(),
                 painter = painterResource(R.drawable.ic_launcher_background),
                 contentDescription = "Book",
-                contentScale = ContentScale.FillWidth)
+                contentScale = ContentScale.FillWidth)*/
+            ImageLoader("https://cdn.pixabay.com/photo/2015/11/10/17/00/still-life-1037378_1280.jpg",true)
             Column(modifier = Modifier
                 .fillMaxSize()
                 .background(
