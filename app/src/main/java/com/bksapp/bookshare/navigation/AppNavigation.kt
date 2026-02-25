@@ -17,7 +17,7 @@ fun AppNavigation(padding: PaddingValues){
 
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = AppRoutes.Login.getRoute(),
+    NavHost(navController, startDestination = AppRoutes.Home.getRoute(),
         modifier = Modifier.padding(padding)) {
 
         composable(
@@ -43,7 +43,9 @@ fun AppNavigation(padding: PaddingValues){
         composable(
             route = AppRoutes.Home.getRoute()
         ){
-            HomeScreen()
+            HomeScreen{book->
+
+            }
         }
 
     }
