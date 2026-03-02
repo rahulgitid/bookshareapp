@@ -47,6 +47,11 @@ dependencies {
     implementation(libs.constraint.lay)
     implementation(libs.material)
 
+    //google font
+    implementation(libs.google.font)
+    //material icon
+    implementation(libs.material.icon)
+
     //Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)

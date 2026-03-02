@@ -62,8 +62,8 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
             }
 
             is NetworkStatus.Success -> {
-                onLogin()
                 Log.i("NetworkStatus ", "SUCCESS")
+                onLogin()
             }
 
             is NetworkStatus.Error -> {
@@ -78,14 +78,6 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
     }
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(
-            brush = Brush.radialGradient(
-                colors = listOf(Color.Cyan, Color.Green, Color.Cyan),
-                center = Offset(configuration.width / 2f, configuration.height / 2f),
-                radius = configuration.width.toFloat(),
-                tileMode = TileMode.Clamp
-            )
-        )
         .imePadding()
     ) {
         ConstraintLayout(
@@ -101,7 +93,7 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
                 onValueChange = { email ->
                     loginViewModel.validEmail(email)
                 },
-                label = { Text("Email", color = Color.Red) },
+                label = { Text("Email") },
                 maxLines = 1,
                 modifier = Modifier
                     .constrainAs(emailField) {
@@ -116,7 +108,7 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
                 onValueChange = { password ->
                     loginViewModel.validPass(password)
                 },
-                label = { Text("Password", color = Color.Red) },
+                label = { Text("Password") },
                 visualTransformation = PasswordVisualTransformation(),
                 maxLines = 1,
                 modifier = Modifier
@@ -138,18 +130,13 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
                     },
                 enabled = loginState.value.isValid,
                 onClick = {
+                    Log.i("NetworkStatus ", "onClick login")
                            keyboardController?.hide()
                            loginViewModel.callLogin()
                           },
                 contentPadding = PaddingValues(0.dp)
             ) {
-                    Text(
-                        "Login",
-                        style = TextStyle(
-                            brush = Brush.horizontalGradient(listOf(Color.Magenta, Color.Red)),
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                    )
+                    Text("Login")
 
             }
             Text(
@@ -162,8 +149,6 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
                     }
                     .padding(top = 16.dp),
                 text = "Register",
-                color = Color.Red,
-                fontWeight = FontWeight.Bold,
                 textDecoration = TextDecoration.Underline
             )
         }
@@ -175,7 +160,6 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally)
             {
                 CircularProgressIndicator(
-                    color = Color.Red,
                     strokeWidth = 10.dp
                 )
 

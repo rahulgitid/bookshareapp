@@ -2,7 +2,6 @@ package com.bksapp.bookshare.ui.signup
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,8 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -50,6 +47,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 
 fun SignUpScreen(navigateTo:()-> Unit) {
+    val scrollState = rememberScrollState()
     val viewModel =  hiltViewModel<SignupViewModel>()
     val userDataState  = viewModel.signupState.collectAsStateWithLifecycle()
     var showDateDialog by remember { mutableStateOf(false) }
@@ -57,27 +55,16 @@ fun SignUpScreen(navigateTo:()-> Unit) {
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input
     )
-
-    val backColor = Brush.verticalGradient(
-        listOf(Color.Magenta,Color.LightGray,Color.LightGray,Color.Green)
-
-    )
-
-    val scrollState = rememberScrollState()
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .background(brush = backColor)
                 .imePadding()
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         )
         {
-
             CommonRow{
                 OutlinedTextField(
                     value = userDataState.value.name,

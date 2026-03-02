@@ -1,7 +1,9 @@
 package com.bksapp.bookshare.utils
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,7 +26,8 @@ fun ImageLoader(url : String,isCustom:Boolean = false){
             contentDescription = "book",
             placeholder = painterResource(R.drawable.ic_launcher_background),
             error = painterResource(R.drawable.ic_launcher_background),
-            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillBounds,
         )
     }
     else{
@@ -36,7 +39,8 @@ fun ImageLoader(url : String,isCustom:Boolean = false){
             contentDescription = "book",
             loading = { CircularProgressIndicator() },
             error = { painterResource(R.drawable.ic_launcher_background)},
-            contentScale = ContentScale.FillWidth
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillBounds
         )
     }
 }

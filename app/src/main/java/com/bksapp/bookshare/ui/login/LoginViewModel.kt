@@ -1,9 +1,9 @@
 package com.bksapp.bookshare.ui.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bksapp.bookshare.data.local.entity.User
-import com.bksapp.bookshare.data.repository.LoginRepositoryImpl
 import com.bksapp.bookshare.data.repository.NetworkStatus
 import com.bksapp.bookshare.domain.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState.asStateFlow()
 
-    private val _loginStatus = MutableStateFlow<NetworkStatus<User>>(NetworkStatus.Idle)
+    private val _loginStatus =  MutableStateFlow<NetworkStatus<User>>(NetworkStatus.Idle)
     val loginStatus = _loginStatus.asStateFlow()
 
 
@@ -35,6 +35,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO)
             {
+
                 val status =  loginRepo.getUser(_loginState.value.email,_loginState.value.password)
                 _loginStatus.value = status
             }
