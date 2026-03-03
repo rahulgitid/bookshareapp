@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,17 +17,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,13 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bksapp.bookshare.R
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.bksapp.bookshare.utils.DatePickerModal
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -64,8 +54,6 @@ fun SignUpScreen(navigateTo:()-> Unit) {
        ) }
 
     var showDateDialog by remember { mutableStateOf(false ) }
-    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = selectedDateMillis,initialDisplayMode = DisplayMode.Input)
 
         Column(modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +64,6 @@ fun SignUpScreen(navigateTo:()-> Unit) {
             verticalArrangement = Arrangement.Center
         )
         {
-
                 SignupTextField(
                     userDataState.value.name,
                     signupActions.onNameChange,
@@ -85,8 +72,6 @@ fun SignUpScreen(navigateTo:()-> Unit) {
                     "Please Enter valid name",
                     KeyboardOptions(keyboardType = KeyboardType.Text),
                 )
-
-
                 SignupTextField(
                     userDataState.value.email,
                     signupActions.onEmailChange,
@@ -95,9 +80,6 @@ fun SignUpScreen(navigateTo:()-> Unit) {
                     "Please Enter valid email",
                     KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
-
-
-
                 SignupTextField(
                     userDataState.value.phone,
                     signupActions.onPhoneChange,
@@ -106,9 +88,6 @@ fun SignUpScreen(navigateTo:()-> Unit) {
                     "Please Enter valid Phone Number",
                     KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
-
-
-
                 SignupTextField(
                     userDataState.value.dob,
                     signupActions.onDobChange,
@@ -123,48 +102,7 @@ fun SignUpScreen(navigateTo:()-> Unit) {
                      },
                     enable = false
                 )
-                Box {
-                    if (showDateDialog) {
-                        DatePickerDialog(
-                            onDismissRequest = {},
-                            properties = DialogProperties(
-                                dismissOnBackPress = true,
-                                dismissOnClickOutside = false,
-                                usePlatformDefaultWidth = false),
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        val selectedDate = datePickerState.selectedDateMillis
-                                        val formattedDate = selectedDate?.let {
-                                            SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(it))
-
-                                        } ?: "No date selected"
-                                        viewModel.updateDOB(formattedDate)
-                                        showDateDialog = false
-                                    }
-                                ) {
-                                    Text(stringResource(R.string.ok))
-                                }
-                            },
-                            dismissButton = {
-                                TextButton({
-                                    showDateDialog = false
-                                }) {
-                                    Text(stringResource(R.string.cancel))
-                                }
-                            }
-                        ) {
-                            DatePicker(state = datePickerState)
-                        }
-                    }
-                }
-
-
-
-
-
-
-          Row(modifier = Modifier.fillMaxWidth().padding(10.dp),
+                Row(modifier = Modifier.fillMaxWidth().padding(10.dp),
               horizontalArrangement = Arrangement.Center) {
               ElevatedButton(
                   modifier = Modifier
@@ -177,6 +115,15 @@ fun SignUpScreen(navigateTo:()-> Unit) {
               }
           }
         }
+
+
+     if(showDateDialog) {
+        DatePickerModal({ dateString ->
+            viewModel.updateDOB(dateString)
+        }, {
+            showDateDialog = false
+        })
+    }
 
 }
 
