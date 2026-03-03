@@ -1,5 +1,8 @@
 package com.bksapp.bookshare.ui.signup
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class SignupState(
     val email : String = "",
     val name : String = "",

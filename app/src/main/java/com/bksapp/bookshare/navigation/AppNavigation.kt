@@ -108,9 +108,7 @@ fun AppNavigation(){
                     route = AppRoutes.Signup.getRoute()
                 ) {
                     SignUpScreen{
-                        navController.navigate(AppRoutes.Login.getRoute()){
-                            navController.popBackStack()
-                        }
+                        navController.popBackStack()
                     }
                 }
 

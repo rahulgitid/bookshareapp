@@ -1,12 +1,12 @@
 package com.bksapp.bookshare.ui.signup
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,14 +16,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,28 +39,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bksapp.bookshare.R
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
+@SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-
 fun SignUpScreen(navigateTo:()-> Unit) {
     val scrollState = rememberScrollState()
     val viewModel =  hiltViewModel<SignupViewModel>()
     val userDataState  = viewModel.signupState.collectAsStateWithLifecycle()
-    var showDateDialog by remember { mutableStateOf(false) }
+    val signupActions = remember(viewModel) { Actions(
+           onNameChange = viewModel::updateName,
+           onEmailChange = viewModel::updateEmail,
+           onPhoneChange = viewModel::updatePhone,
+           onDobChange = viewModel::updateDOB,
+           onSubmit = navigateTo,
+       ) }
 
-    val datePickerState = rememberDatePickerState(
-        initialDisplayMode = DisplayMode.Input
-    )
-        Column(
-            modifier = Modifier
+    var showDateDialog by remember { mutableStateOf(false ) }
+    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = selectedDateMillis,initialDisplayMode = DisplayMode.Input)
+
+        Column(modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
                 .imePadding()
@@ -65,97 +76,69 @@ fun SignUpScreen(navigateTo:()-> Unit) {
             verticalArrangement = Arrangement.Center
         )
         {
-            CommonRow{
-                OutlinedTextField(
-                    value = userDataState.value.name,
-                    onValueChange = { name ->
-                        viewModel.updateName(name)
-                    },
-                    label = { Text("name") },
-                    isError = !userDataState.value.isValidName,
-                    supportingText = {
-                        if(!userDataState.value.isValidName) {
-                            Text("Please Enter valid name")
-                        }
-                        else{Text(text = "")}
-                    }
 
+                SignupTextField(
+                    userDataState.value.name,
+                    signupActions.onNameChange,
+                    "name",
+                    !userDataState.value.isValidName,
+                    "Please Enter valid name",
+                    KeyboardOptions(keyboardType = KeyboardType.Text),
                 )
-            }
 
-            CommonRow {
-                OutlinedTextField(
-                    value = userDataState.value.email,
-                    onValueChange = { email ->
-                        viewModel.updateEmail(email)
-                    },
-                    label = {Text("Email")},
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email
-                    ),
-                    isError = !userDataState.value.isValidEmail,
-                    supportingText = {
-                        if(!userDataState.value.isValidEmail) {
-                            Text("Please Enter valid email")
-                        }
-                        else{Text(text = "")}
-                    }
+
+                SignupTextField(
+                    userDataState.value.email,
+                    signupActions.onEmailChange,
+                    "Email",
+                    !userDataState.value.isValidName,
+                    "Please Enter valid email",
+                    KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
-            }
 
-            CommonRow {
-                OutlinedTextField(
-                    value = userDataState.value.phone,
-                    onValueChange = { phone ->
-                        viewModel.updatePhone(phone)
-                    },
-                    label = {Text("Phone")},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    isError = !userDataState.value.isValidPhone,
-                    supportingText = {
-                        if(!userDataState.value.isValidPhone) {
-                            Text("Please Enter valid phone number")
-                        }
-                        else{Text(text = "")}
-                    }
 
+
+                SignupTextField(
+                    userDataState.value.phone,
+                    signupActions.onPhoneChange,
+                    "Phone",
+                    !userDataState.value.isValidPhone,
+                    "Please Enter valid Phone Number",
+                    KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
-            }
 
-            CommonRow{
-                OutlinedTextField(
-                    value = userDataState.value.dob,
-                    onValueChange = {dob->
-                        viewModel.updateDOB(dob)
-                    },
-                    label = { Text("DOB") },
-                    isError = !userDataState.value.isValidDOB,
-                    supportingText = {
-                        if(!userDataState.value.isValidDOB) {
-                            Text("Please Enter valid DOB")
-                        }
-                        else{Text(text = "")}
-                    },
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { showDateDialog = true }
-                        )
-                        {
 
-                    }
-                  },
+
+                SignupTextField(
+                    userDataState.value.dob,
+                    signupActions.onDobChange,
+                    "DOB",
+                    !userDataState.value.isValidDOB,
+                    "Please Enter valid Phone DOB",
+                     trailingIcon = {
+                         IconButton(onClick = { showDateDialog = true })
+                         {
+                             Icon(Icons.Filled.DateRange, contentDescription = "")
+                         }
+                     },
+                    enable = false
                 )
                 Box {
                     if (showDateDialog) {
                         DatePickerDialog(
                             onDismissRequest = {},
-                            {
+                            properties = DialogProperties(
+                                dismissOnBackPress = true,
+                                dismissOnClickOutside = false,
+                                usePlatformDefaultWidth = false),
+                            confirmButton = {
                                 TextButton(
                                     onClick = {
                                         val selectedDate = datePickerState.selectedDateMillis
-                                        val instant = Instant.ofEpochMilli(selectedDate ?: 0L)
-                                        val localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate()
-                                        val formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                        val formattedDate = selectedDate?.let {
+                                            SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(it))
+
+                                        } ?: "No date selected"
                                         viewModel.updateDOB(formattedDate)
                                         showDateDialog = false
                                     }
@@ -175,29 +158,55 @@ fun SignUpScreen(navigateTo:()-> Unit) {
                         }
                     }
                 }
-            }
 
-            CommonRow  {
-                ElevatedButton(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(50.dp),
-                    onClick = {navigateTo()},
-                    enabled = userDataState.value.isValid
-                    ) {
-                    Text(stringResource(R.string.submit))
-                }
-            }
+
+
+
+
+
+          Row(modifier = Modifier.fillMaxWidth().padding(10.dp),
+              horizontalArrangement = Arrangement.Center) {
+              ElevatedButton(
+                  modifier = Modifier
+                      .width(200.dp)
+                      .height(50.dp),
+                  onClick =  signupActions.onSubmit ,
+                  enabled = userDataState.value.isValid
+              ) {
+                  Text(stringResource(R.string.submit))
+              }
+          }
         }
 
 }
 
+
 @Composable
-fun CommonRow(rowContent: @Composable RowScope.()->Unit){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.Center
-       ,content = rowContent)
+fun SignupTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isError: Boolean,
+    errorText: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    enable : Boolean = true
+) {
+
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { Text(label) },
+            isError = isError,
+            keyboardOptions = keyboardOptions,
+            trailingIcon = trailingIcon,
+            supportingText = {
+                if (isError) Text(errorText) else Text("")
+            },
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            enabled = enable
+        )
+
 }
+
+
