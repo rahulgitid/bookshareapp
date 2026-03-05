@@ -7,7 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -19,6 +23,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -47,9 +54,12 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
     val configuration = LocalWindowInfo.current.containerSize
 
     val loginViewModel = hiltViewModel<LoginViewModel>()
-    val loginState = loginViewModel.loginState.collectAsStateWithLifecycle()
+    val loginState by loginViewModel.loginState.collectAsStateWithLifecycle()
     val loginStatus = loginViewModel.loginStatus.collectAsStateWithLifecycle()
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val loginDerived by remember  {  derivedStateOf { loginState.isValid} }
+
 
     LaunchedEffect(loginStatus.value) {
         when (loginStatus.value) {
@@ -76,6 +86,7 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
             }
         }
     }
+
     Box(modifier = Modifier
         .fillMaxSize()
         .imePadding()
@@ -89,7 +100,7 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
             val (emailField, passField, submitBT, signupTxt) = createRefs()
 
             OutlinedTextField(
-                value = loginState.value.email,
+                value = loginState.email,
                 onValueChange = { email ->
                     loginViewModel.validEmail(email)
                 },
@@ -104,7 +115,7 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
 
             )
             OutlinedTextField(
-                value = loginState.value.password,
+                value = loginState.password,
                 onValueChange = { password ->
                     loginViewModel.validPass(password)
                 },
@@ -128,7 +139,7 @@ fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     },
-                enabled = loginState.value.isValid,
+                enabled = loginDerived,
                 onClick = {
                     Log.i("NetworkStatus ", "onClick login")
                            keyboardController?.hide()
