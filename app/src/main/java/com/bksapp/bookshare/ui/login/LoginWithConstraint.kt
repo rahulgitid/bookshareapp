@@ -51,7 +51,6 @@ import com.bksapp.bookshare.data.repository.NetworkStatus
 fun LoginScreen(onLogin:()->Unit,onSignup:()->Unit) {
 
     val context = LocalContext.current
-    val configuration = LocalWindowInfo.current.containerSize
 
     val loginViewModel = hiltViewModel<LoginViewModel>()
     val loginState by loginViewModel.loginState.collectAsStateWithLifecycle()

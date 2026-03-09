@@ -19,7 +19,7 @@ class BookRepositoryImpl @Inject constructor(): BookRepository {
 
     fun getAllBooks() : List<Book> = books
     fun getBookById(id : Int) : Book {
-        return books.find { it.id == id }?:Book(0,"No Book",0,"")
+        return books.find { it.id == id }?:Book(0,"No Book",0,"",",","","")
     }
 }
 

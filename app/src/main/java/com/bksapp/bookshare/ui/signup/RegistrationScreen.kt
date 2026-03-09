@@ -43,9 +43,10 @@ import com.bksapp.bookshare.utils.DatePickerModal
 @Composable
 fun SignUpScreen(navigateTo:()-> Unit) {
     val scrollState = rememberScrollState()
-    val viewModel =  hiltViewModel<SignupViewModel>()
-    val userDataState  = viewModel.signupState.collectAsStateWithLifecycle()
-    val signupActions = remember(viewModel) { Actions(
+    val viewModel = hiltViewModel<SignupViewModel>()
+    val userDataState  by viewModel.signupState.collectAsStateWithLifecycle()
+    val signupActions = remember(viewModel) {
+        Actions(
            onNameChange = viewModel::updateName,
            onEmailChange = viewModel::updateEmail,
            onPhoneChange = viewModel::updatePhone,
@@ -65,34 +66,34 @@ fun SignUpScreen(navigateTo:()-> Unit) {
         )
         {
                 SignupTextField(
-                    userDataState.value.name,
+                    userDataState.name,
                     signupActions.onNameChange,
                     "name",
-                    !userDataState.value.isValidName,
+                    !userDataState.isValidName,
                     "Please Enter valid name",
                     KeyboardOptions(keyboardType = KeyboardType.Text),
                 )
                 SignupTextField(
-                    userDataState.value.email,
+                    userDataState.email,
                     signupActions.onEmailChange,
                     "Email",
-                    !userDataState.value.isValidName,
+                    !userDataState.isValidName,
                     "Please Enter valid email",
                     KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
                 SignupTextField(
-                    userDataState.value.phone,
+                    userDataState.phone,
                     signupActions.onPhoneChange,
                     "Phone",
-                    !userDataState.value.isValidPhone,
+                    !userDataState.isValidPhone,
                     "Please Enter valid Phone Number",
                     KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
                 SignupTextField(
-                    userDataState.value.dob,
+                    userDataState.dob,
                     signupActions.onDobChange,
                     "DOB",
-                    !userDataState.value.isValidDOB,
+                    !userDataState.isValidDOB,
                     "Please Enter valid Phone DOB",
                      trailingIcon = {
                          IconButton(onClick = { showDateDialog = true })
@@ -109,7 +110,7 @@ fun SignUpScreen(navigateTo:()-> Unit) {
                       .width(200.dp)
                       .height(50.dp),
                   onClick =  signupActions.onSubmit ,
-                  enabled = userDataState.value.isValid
+                  enabled = userDataState.isValid
               ) {
                   Text(stringResource(R.string.submit))
               }

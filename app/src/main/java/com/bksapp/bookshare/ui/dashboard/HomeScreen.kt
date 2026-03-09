@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -54,6 +55,7 @@ import com.bksapp.bookshare.ui.theme.AppTheme
 import com.bksapp.bookshare.ui.theme.AppTypography
 
 import com.bksapp.bookshare.utils.ImageLoader
+import com.bksapp.bookshare.utils.cardStyle
 
 @Composable
 fun HomeScreen(showBookDetail : (book : Book)->Unit){
@@ -106,7 +108,7 @@ fun HomeScreen(showBookDetail : (book : Book)->Unit){
 @Composable
 fun BookList(books: List<Book>,showBookDetail : (book : Book)->Unit){
     LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Adaptive(150.dp),
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -126,11 +128,8 @@ fun BookList(books: List<Book>,showBookDetail : (book : Book)->Unit){
 
 @Composable
 fun BookDesign(book: Book,showBookDetail : (book : Book)->Unit){
-
     Card(
-        onClick = {
-            showBookDetail(book)
-        }
+        onClick =  { showBookDetail(book) }
     ) {
         Column {
             Box(modifier = Modifier.fillMaxWidth().height(150.dp)){
