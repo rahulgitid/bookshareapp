@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocal
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -41,8 +42,7 @@ import com.bksapp.bookshare.ui.theme.Primary
 fun AppNavigation(){
 
     val navController = rememberNavController()
-
-    AppTheme(false) {
+    AppTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -65,7 +65,7 @@ fun AppNavigation(){
                 )
             }
         ) { innerpading ->
-            NavHost(navController, startDestination = AppRoutes.Login.getRoute(),
+            NavHost(navController, startDestination = AppRoutes.Home.getRoute(),
                 modifier = Modifier.padding(innerpading),
                 enterTransition = {
                     slideIntoContainer(

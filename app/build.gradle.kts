@@ -64,6 +64,7 @@ dependencies {
     //Hilt
     implementation(libs.hilt)
     implementation(libs.hilt.navigation)
+    implementation(libs.androidx.foundation.layout)
     ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)
