@@ -3,6 +3,7 @@ package com.bksapp.bookshare.utils
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -16,26 +17,19 @@ import com.bksapp.bookshare.R
 @Composable
 fun ImageLoader(url : String,isCustom:Boolean = false){
 
-    val context = LocalContext.current
     if(!isCustom) {
         AsyncImage(
-            model = Builder(context)
-                .data(url)
-                .crossfade(true)
-                .build(),
+            model = url,
             contentDescription = "book",
             placeholder = painterResource(R.drawable.ic_launcher_background),
             error = painterResource(R.drawable.ic_launcher_background),
             modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.FillBounds,
+            contentScale = ContentScale.Crop,
         )
     }
     else{
         SubcomposeAsyncImage(
-            model = Builder(context)
-                .data(url)
-                .crossfade(true)
-                .build(),
+            model = url,
             contentDescription = "book",
             loading = { CircularProgressIndicator() },
             error = { painterResource(R.drawable.ic_launcher_background)},

@@ -117,7 +117,7 @@ fun BookList(books: List<Book>,showBookDetail : (book : Book)->Unit){
         item(span = { GridItemSpan(maxLineSpan) }){
             Text(text= "Books")
         }
-           items(items = books,key = {book->book.id}){ book->
+           items(items = books,key = {book->book.id}, contentType = {"book_item"}){ book->
                BookDesign(book,showBookDetail)
            }
         }
@@ -134,7 +134,7 @@ fun BookDesign(book: Book,showBookDetail : (book : Book)->Unit){
         Column {
             Box(modifier = Modifier.fillMaxWidth().height(150.dp)){
 
-                ImageLoader(book.cover,true)
+                ImageLoader(book.cover,false)
             }
             Column(modifier = Modifier
                 .fillMaxSize()
