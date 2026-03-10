@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -134,7 +135,7 @@ fun BookDesign(book: Book,showBookDetail : (book : Book)->Unit){
         Column {
             Box(modifier = Modifier.fillMaxWidth().height(150.dp)){
 
-                ImageLoader(book.cover,false)
+                ImageLoader(book.cover,false, FilterQuality.Low)
             }
             Column(modifier = Modifier
                 .fillMaxSize()

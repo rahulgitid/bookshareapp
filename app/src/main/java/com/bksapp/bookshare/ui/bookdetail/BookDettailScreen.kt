@@ -45,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
@@ -101,7 +102,7 @@ fun BookView() {
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(30.dp),
             ) {
-                ImageLoader(book.cover)
+                ImageLoader(book.cover, quality = FilterQuality.Medium)
             }
             Column(modifier = Modifier.align(Alignment.TopEnd)) {
                 ShareBook()
