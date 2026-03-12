@@ -34,8 +34,10 @@ import com.bksapp.bookshare.ui.dashboard.HomeScreen
 import com.bksapp.bookshare.ui.login.LoginEvent
 import com.bksapp.bookshare.ui.login.LoginScreen
 import com.bksapp.bookshare.ui.signup.SignUpScreen
+import com.bksapp.bookshare.ui.splash.SplashScreen
 import com.bksapp.bookshare.ui.theme.AppTheme
 import com.bksapp.bookshare.ui.theme.Primary
+import kotlinx.coroutines.delay
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +67,7 @@ fun AppNavigation(){
                 )
             }
         ) { innerpading ->
-            NavHost(navController, startDestination = AppRoutes.Home.getRoute(),
+            NavHost(navController, startDestination = AppRoutes.Splash.getRoute(),
                 modifier = Modifier.padding(innerpading),
                 enterTransition = {
                     slideIntoContainer(
@@ -93,6 +95,15 @@ fun AppNavigation(){
                 }
                 )
             {
+
+                composable(route = AppRoutes.Splash.getRoute()){
+                    SplashScreen {
+                        navController.navigate(AppRoutes.Home.getRoute()){
+                            navController.popBackStack()
+                        }
+                    }
+
+                }
 
                 composable(
                     route = AppRoutes.Login.getRoute()

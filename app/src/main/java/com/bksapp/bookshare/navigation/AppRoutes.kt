@@ -1,11 +1,17 @@
 package com.bksapp.bookshare.navigation
 
-
+const val SPLASH_ROUTE = "splash"
 const val LOGIN_ROUTE = "login"
 const val SIGNUP_ROUTE = "signup"
 const val HOME_ROUTE = "home"
 const val BOOK_DETAIL = "bookdetail"
 sealed class AppRoutes{
+
+    object Splash : AppRoutes(){
+        fun getRoute(): String{
+            return SPLASH_ROUTE
+        }
+    }
    object Signup : AppRoutes(){
         fun getRoute() : String
         {
