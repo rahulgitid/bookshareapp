@@ -17,9 +17,18 @@ class BookRepositoryImpl @Inject constructor(): BookRepository {
         return getBookById(id)
     }
 
+    override suspend fun getBooksCategories(): List<String> {
+        return getCategories()
+    }
+
     fun getAllBooks() : List<Book> = books
     fun getBookById(id : Int) : Book {
-        return books.find { it.id == id }?:Book(0,"No Book",0,"",",","","")
+        return books.find { it.id == id }?:
+        Book(0,"Atomic Habits","James Clear",399,799,4.8,12543,"https://covers.openlibrary.org/b/id/10523338-L.jpg","Self Help","Avery",320,"2018","English")
+    }
+
+    fun getCategories(): List<String>{
+        return books.map{ it.category }.distinct()
     }
 }
 

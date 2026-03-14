@@ -5,4 +5,6 @@ import com.bksapp.bookshare.data.local.entity.Book
 interface BookRepository {
     suspend fun getBooks() : List<Book>
     suspend fun getBook(id : Int) : Book
+
+    suspend fun getBooksCategories(): List<String>
 }

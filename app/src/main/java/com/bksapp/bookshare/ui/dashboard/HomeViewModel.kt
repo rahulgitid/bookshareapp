@@ -21,12 +21,17 @@ class HomeViewModel @Inject constructor(
     private val _bookState = MutableStateFlow<NetworkStatus<List<Book>>>(NetworkStatus.Idle)
     val bookState = _bookState.asStateFlow()
 
+    private val _bookCats = MutableStateFlow<List<String>>(emptyList())
+    val bookCats = _bookCats.asStateFlow()
+
     init{
         _bookState.value = NetworkStatus.Loading
         viewModelScope.launch {
             withContext(Dispatchers.IO)
              {
-                _bookState.value = NetworkStatus.Success(bookRepo.getBooks())
+                val books = bookRepo.getBooks()
+                _bookState.value = NetworkStatus.Success(books)
+                 _bookCats.value = books.map { it.category }.distinct()
              }
          }
         }
