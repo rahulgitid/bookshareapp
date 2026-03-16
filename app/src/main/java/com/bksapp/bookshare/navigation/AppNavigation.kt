@@ -126,9 +126,11 @@ fun AppNavigation(){
                 composable(
                     route = AppRoutes.Home.getRoute(),
                 ){
-                    HomeScreen{book->
-                        navController.navigate(AppRoutes.BookDetails.getRoute(book.id))
-                    }
+                    HomeScreen(
+                        {id->
+                        navController.navigate(AppRoutes.BookDetails.getRoute(id))
+                    },
+                    {} )
                 }
 
                 composable(

@@ -3,7 +3,8 @@ package com.bksapp.bookshare.ui.theme
 import androidx.compose.ui.graphics.Color
 // Light Theme Colors
 
-val Primary = Color(0xFF1B5E20)        // Forest Green
+val Primary = Color(0xFFFF8A50)
+val PrimaryLight = Color(0xFFFF9E8F)
 val OnPrimary = Color(0xFFFFFFFF)
 
 val Secondary = Color(0xFFEF6C00)      // Burnt Orange

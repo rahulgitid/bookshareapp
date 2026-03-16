@@ -19,6 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.R
+import com.bksapp.bookshare.ui.theme.Primary
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.time.delay
 
 
 @Composable
@@ -30,6 +33,7 @@ fun SplashScreen(goToMain : ()->Unit){
             targetValue = 0f,
             animationSpec = tween(durationMillis = 2000, easing = LinearEasing),
         )
+        delay(200L)
         goToMain()
     }
 
@@ -39,7 +43,7 @@ fun SplashScreen(goToMain : ()->Unit){
             .drawBehind {
                 val topY = size.height * progress.value
                 drawRect(
-                    color = Color.Red,
+                    color = Primary,
                     topLeft = Offset(0f, topY),
                     size = Size(size.width, size.height-topY )
                 )

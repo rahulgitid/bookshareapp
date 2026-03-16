@@ -19,7 +19,10 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
+import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -46,6 +49,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.absoluteValue
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("FrequentlyChangingValue")
 @Composable
 fun AutoScrollRow(books: List<Book>, callBookCat: (String) -> Unit) {
@@ -59,12 +63,12 @@ fun AutoScrollRow(books: List<Book>, callBookCat: (String) -> Unit) {
     val actualSize = books.size
 
 
-    val pagerState = rememberPagerState(
+     val pagerState = rememberPagerState(
         initialPage = (totalPages / 2) - ((totalPages / 2) % actualSize), // Ensures it starts at index 0
         pageCount = { totalPages }
     )
 
-    val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
+   val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
 
     LaunchedEffect(Unit) {
 

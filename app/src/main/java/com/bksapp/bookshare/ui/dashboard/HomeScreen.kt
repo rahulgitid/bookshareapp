@@ -5,11 +5,13 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -31,7 +34,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -57,19 +62,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bksapp.bookshare.data.local.entity.Book
 import com.bksapp.bookshare.data.repository.NetworkStatus
 import com.bksapp.bookshare.ui.dashboard.homecomponent.AutoScrollRow
-import com.bksapp.bookshare.ui.theme.AppTypography
-import com.bksapp.bookshare.utils.ImageLoader
-import kotlin.math.abs
-import kotlin.math.absoluteValue
+import com.bksapp.bookshare.ui.dashboard.homecomponent.BestSellerBooks
+import com.bksapp.bookshare.ui.dashboard.homecomponent.BookCats
+import com.bksapp.bookshare.ui.dashboard.homecomponent.HorizontalBookCatalog
+
 
 @Composable
-fun HomeScreen(showBookDetail : (book : Book)->Unit, callBookCat : (String)->Unit){
+fun HomeScreen(showBookDetail : (id : Int)->Unit, callBookCat : (String)->Unit){
 
      val homeViewModel = hiltViewModel<HomeViewModel>()
      val bookState by homeViewModel.bookState.collectAsStateWithLifecycle()
      val bookCats by homeViewModel.bookCats.collectAsStateWithLifecycle()
 
-
+    val verticalState = rememberScrollState()
     when(bookState){
         is NetworkStatus.Idle->{}
         is NetworkStatus.Loading->{}
@@ -83,10 +88,15 @@ fun HomeScreen(showBookDetail : (book : Book)->Unit, callBookCat : (String)->Uni
 
        if(bookState is NetworkStatus.Success){
            val books = bookState as NetworkStatus.Success<List<Book>>
-           Column {
+           Column(
+               Modifier.verticalScroll(verticalState)
+           ) {
+
                  BookCats(bookCats)
                  AutoScrollRow(books.data.subList(0,7),callBookCat)
-                 BookList(books.data, showBookDetail)
+                 Spacer(modifier = Modifier.height(16.dp))
+                 HorizontalBookCatalog(books.data, showBookDetail)
+                 BestSellerBooks(books.data.subList(5,15)) { showBookDetail(it) }
 
            }
        }
@@ -110,92 +120,12 @@ fun HomeScreen(showBookDetail : (book : Book)->Unit, callBookCat : (String)->Uni
 
 
 
-@Composable
-fun BookCats(cats: List<String>){
-    LazyRow(
-        contentPadding = PaddingValues(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-
-         items(cats, contentType = {"Categories"}){
-             BookCatItem(it)
-         }
-    }
-
-}
-
-@Composable
-fun BookCatItem(cat: String){
-    Card(modifier = Modifier
-        .wrapContentWidth()
-        .border(1.dp, color = Color.LightGray, shape = RoundedCornerShape(20.dp)),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        )
-    ) {
-        Text(modifier = Modifier.padding(10.dp), text = cat, style = MaterialTheme.typography.bodyMedium)
-    }
-}
 
 
 
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun BookList(books: List<Book>,showBookDetail : (book : Book)->Unit){
-    val customState = rememberLazyGridState(
-        prefetchStrategy = LazyGridPrefetchStrategy(nestedPrefetchItemCount = 6)
-    )
-    LazyVerticalGrid(
-            columns = GridCells.Adaptive(150.dp),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            state = customState
-
-        ) {
-        item(span = { GridItemSpan(maxLineSpan) }){
-            Text(text= "Books")
-        }
-           items(items = books,key = {book->book.id}, contentType = {"book_item"}){ book->
-               BookDesign(book,showBookDetail)
-           }
-        }
 
 
-}
 
 
-@Composable
-fun BookDesign(book: Book,showBookDetail : (book : Book)->Unit){
-    Card(
-        onClick =  { showBookDetail(book) }
-    ) {
-        Column {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)){
-
-                ImageLoader(book.cover,false, FilterQuality.Low)
-            }
-            Column(modifier = Modifier
-                .fillMaxSize()
-               ){
-                Text(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                    text = book.title, style = AppTypography.titleMedium,maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                        text = "${book.price}Rs", style = AppTypography.titleSmall, textAlign = TextAlign.End
-                 )
-            }
-
-        }
-    }
-
-}
 

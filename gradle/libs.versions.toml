@@ -19,6 +19,7 @@ coil = "3.3.0"
 google_font = "1.10.4"
 material-icon="1.7.7"
 foundationLayout = "1.10.4"
+runtime = "1.10.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +44,7 @@ coil-network = {group = "io.coil-kt.coil3", name = "coil-network-okhttp", versio
 google-font = {group = "androidx.compose.ui", name = "ui-text-google-fonts",version.ref = "google_font"}
 material-icon = {group = "androidx.compose.material", name = "material-icons-extended", version.ref="material-icon"}
 androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

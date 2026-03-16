@@ -48,13 +48,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bksapp.bookshare.R
 import com.bksapp.bookshare.data.local.entity.Book
 import com.bksapp.bookshare.data.repository.NetworkStatus
+
 import com.bksapp.bookshare.utils.ImageLoader
 import com.bksapp.bookshare.utils.localBook
 
@@ -132,7 +135,7 @@ fun BookView() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 14.dp),
-            text = "₹${book.price}",
+            text = stringResource(R.string.rupee, book.price),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -206,13 +209,13 @@ fun BookData() {
         thickness = 2.dp,
         color = Color.LightGray
     )
-    BookInfo("Pages", book.pages, Icons.AutoMirrored.Filled.MenuBook)
+    BookInfo("Pages", "${book.pages}", Icons.AutoMirrored.Filled.MenuBook)
     VerticalDivider(
         modifier = Modifier.padding(6.dp),
         thickness = 2.dp,
         color = Color.LightGray
     )
-    BookInfo("Reviews", book.reviews, Icons.Filled.Star)
+    BookInfo("Reviews", "${book.reviews}", Icons.Filled.Star)
 }
 
 @Composable
