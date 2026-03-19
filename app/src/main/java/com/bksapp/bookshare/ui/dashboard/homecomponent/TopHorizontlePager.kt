@@ -1,6 +1,8 @@
 package com.bksapp.bookshare.ui.dashboard.homecomponent
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.gestures.stopScroll
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -42,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.bksapp.bookshare.data.local.entity.Book
+import com.bksapp.bookshare.data.local.entity.BookList
 import com.bksapp.bookshare.ui.theme.AppTypography
 import com.bksapp.bookshare.utils.ImageLoader
 import kotlinx.coroutines.delay
@@ -52,15 +56,17 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("FrequentlyChangingValue")
 @Composable
-fun AutoScrollRow(books: List<Book>, callBookCat: (String) -> Unit) {
+fun AutoScrollRow(list: BookList, callBookCat: (String) -> Unit) {
+    val books = list.items
     val config = LocalWindowInfo.current
     val screenWidth = config.containerDpSize.width
     val itemWidth = screenWidth * 0.7f
     val contentPadding = PaddingValues(horizontal = (screenWidth - itemWidth) / 2)
 
 
-    val totalPages = Int.MAX_VALUE // 1. Use max value for "infinite" swiping
+
     val actualSize = books.size
+    val totalPages = actualSize*15
 
 
      val pagerState = rememberPagerState(
@@ -70,8 +76,7 @@ fun AutoScrollRow(books: List<Book>, callBookCat: (String) -> Unit) {
 
    val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
 
-    LaunchedEffect(Unit) {
-
+    LaunchedEffect(isDragged) {
         snapshotFlow { isDragged }
             .collectLatest {
                 if (!it) {
@@ -97,6 +102,7 @@ fun AutoScrollRow(books: List<Book>, callBookCat: (String) -> Unit) {
             contentPadding = contentPadding,
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
+            key = {index-> books[index % actualSize].id}
         ) { page ->
             val index = page % actualSize
             Box(
@@ -121,7 +127,7 @@ fun AutoScrollRow(books: List<Book>, callBookCat: (String) -> Unit) {
                     }
                     .fillMaxWidth()
                     .aspectRatio(1f)) {
-                TopScrollRowItem({ books[index] }, callBookCat)
+                TopScrollRowItem( books[index] , callBookCat)
             }
 
 
@@ -160,9 +166,9 @@ fun PagerDots(modifier: Modifier, actualSize: Int, currentIndex: () -> Int) {
 
 
 @Composable
-fun TopScrollRowItem(getBook: () -> Book, callBookCat: (String) -> Unit) {
+fun TopScrollRowItem(book: Book, callBookCat: (String) -> Unit) {
 
-    val book by remember(getBook) { derivedStateOf { getBook() } }
+
     Card(
         onClick = { callBookCat(book.category) }
     ) {

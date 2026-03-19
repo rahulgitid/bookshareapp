@@ -18,3 +18,7 @@ data class Book(
     val published: String,
     val language: String
 )
+
+
+@Immutable
+data class BookList(val items: List<Book>)

@@ -1,29 +1,12 @@
 package com.bksapp.bookshare.navigation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocal
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,61 +19,38 @@ import com.bksapp.bookshare.ui.login.LoginScreen
 import com.bksapp.bookshare.ui.signup.SignUpScreen
 import com.bksapp.bookshare.ui.splash.SplashScreen
 import com.bksapp.bookshare.ui.theme.AppTheme
-import com.bksapp.bookshare.ui.theme.Primary
-import kotlinx.coroutines.delay
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AppNavigation(){
-
+    val animationTime = 180
     val navController = rememberNavController()
     AppTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {Text("Login")},
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = { /* Handle action */ }) {
-                            Icon(Icons.Filled.Search, contentDescription = "Search")
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Primary
-                    )
-                )
-            }
-        ) { innerpading ->
+        Scaffold{ innerpading ->
             NavHost(navController, startDestination = AppRoutes.Splash.getRoute(),
                 modifier = Modifier.padding(innerpading),
                 enterTransition = {
                     slideIntoContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
+                        animationSpec = tween(animationTime)
                     )
                 },
                 exitTransition = {
                     slideOutOfContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
+                        animationSpec = tween(animationTime)
                     )
                 },
                 popEnterTransition = {
                     slideIntoContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(700)
+                        animationSpec = tween(animationTime)
                     )
                 },
                 popExitTransition = {
                     slideOutOfContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(700)
+                        animationSpec = tween(animationTime)
                     )
                 }
                 )
@@ -99,7 +59,11 @@ fun AppNavigation(){
                 composable(route = AppRoutes.Splash.getRoute()){
                     SplashScreen {
                         navController.navigate(AppRoutes.Home.getRoute()){
-                            navController.popBackStack()
+                            popUpTo(AppRoutes.Splash.getRoute()){
+                                inclusive = true
+                            }
+
+                            launchSingleTop = true
                         }
                     }
 
@@ -135,16 +99,20 @@ fun AppNavigation(){
 
                 composable(
                     route = AppRoutes.BookDetails.getRoute(AppRoutes.BookDetails.BOOK_ID),
-                    arguments = listOf(navArgument(AppRoutes.BookDetails.BOOK_ID,{type = NavType.IntType}))
+                    arguments = listOf(
+                        navArgument(AppRoutes.BookDetails.BOOK_ID) {
+                            type = NavType.IntType
+                        }
+                    )
                 ){ backStackEntry->
                     val id = backStackEntry.arguments?.getInt(AppRoutes.BookDetails.BOOK_ID)?:0
-                    if(id==0){
+                    BookDetails(id){
                         navController.popBackStack()
                     }
-                    else{
-                        BookDetails(id)
-                    }
+
                 }
+
+
 
             }
         }

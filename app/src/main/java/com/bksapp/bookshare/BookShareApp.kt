@@ -7,6 +7,7 @@ import coil3.SingletonImageLoader
 import coil3.disk.DiskCache
 import coil3.disk.directory
 import coil3.memory.MemoryCache
+import coil3.request.CachePolicy
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import dagger.hilt.android.HiltAndroidApp
@@ -24,6 +25,8 @@ class BookShareApp : Application(), SingletonImageLoader.Factory {
                      .directory(cacheDir.resolve("book_cache"))
                      .maxSizeBytes(50L * 1024 * 1024).build()
             }
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
 
             .logger(DebugLogger())
             .build()

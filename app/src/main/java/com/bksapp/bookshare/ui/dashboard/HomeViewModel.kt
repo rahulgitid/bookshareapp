@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,21 +18,30 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val bookRepo : BookRepository
 ): ViewModel() {
-
-    private val _bookState = MutableStateFlow<NetworkStatus<List<Book>>>(NetworkStatus.Idle)
+   private val _bookState = MutableStateFlow<NetworkStatus<List<Book>>>(NetworkStatus.Idle)
     val bookState = _bookState.asStateFlow()
 
-    private val _bookCats = MutableStateFlow<List<String>>(emptyList())
-    val bookCats = _bookCats.asStateFlow()
+    private val _homeUIState = MutableStateFlow(HomeUIState())
+    val homeUiState = _homeUIState.asStateFlow()
+
 
     init{
-        _bookState.value = NetworkStatus.Loading
+
         viewModelScope.launch {
+            _homeUIState.update{it.copy(isLoading = true)}
             withContext(Dispatchers.IO)
-             {
-                val books = bookRepo.getBooks()
-                _bookState.value = NetworkStatus.Success(books)
-                 _bookCats.value = books.map { it.category }.distinct()
+            {
+                 val books = bookRepo.getBooks()
+                 _homeUIState.update{
+                     it.copy(
+                         isLoading = false,
+                      error = null,
+                      bookCats  = books.map { book->book.category }.distinct(),
+                      allBooksData  = books,
+                      carouselData = books.subList(0,7),
+                      bestSellerDataData  = books.subList(5,10)
+                     )
+                 }
              }
          }
         }
