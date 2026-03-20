@@ -2,11 +2,17 @@ package com.bksapp.bookshare.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,10 +29,18 @@ import com.bksapp.bookshare.ui.theme.AppTheme
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AppNavigation(){
-    val animationTime = 180
+    val animationTime = 400
     val navController = rememberNavController()
     AppTheme {
-        Scaffold{ innerpading ->
+        Scaffold(
+            topBar = {
+              Box(modifier=Modifier
+                  .fillMaxWidth()
+                  .height(54.dp)
+                  .background(color = MaterialTheme.colorScheme.primaryContainer)
+              )
+            }
+        ){ innerpading ->
             NavHost(navController, startDestination = AppRoutes.Splash.getRoute(),
                 modifier = Modifier.padding(innerpading),
                 enterTransition = {
@@ -106,9 +120,7 @@ fun AppNavigation(){
                     )
                 ){ backStackEntry->
                     val id = backStackEntry.arguments?.getInt(AppRoutes.BookDetails.BOOK_ID)?:0
-                    BookDetails(id){
-                        navController.popBackStack()
-                    }
+                    BookDetails(id)
 
                 }
 

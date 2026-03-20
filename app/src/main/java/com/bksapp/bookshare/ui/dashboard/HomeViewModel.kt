@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
                          isLoading = false,
                       error = null,
                       bookCats  = books.map { book->book.category }.distinct(),
-                      allBooksData  = books,
+                      allBooksData  = books.filter { it.id%2==0},
                       carouselData = books.subList(0,7),
                       bestSellerDataData  = books.subList(5,10)
                      )

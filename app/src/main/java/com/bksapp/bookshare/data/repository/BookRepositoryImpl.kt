@@ -8,12 +8,10 @@ import javax.inject.Inject
 
 class BookRepositoryImpl @Inject constructor(): BookRepository {
     override suspend fun getBooks(): List<Book> {
-       delay(1500)
         return getAllBooks()
     }
 
     override suspend fun getBook(id: Int): Book {
-        delay(1500)
         return getBookById(id)
     }
 
@@ -31,5 +29,3 @@ class BookRepositoryImpl @Inject constructor(): BookRepository {
         return books.map{ it.category }.distinct()
     }
 }
-
-
