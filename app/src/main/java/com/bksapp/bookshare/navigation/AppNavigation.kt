@@ -32,15 +32,7 @@ fun AppNavigation(){
     val animationTime = 400
     val navController = rememberNavController()
     AppTheme {
-        Scaffold(
-            topBar = {
-              Box(modifier=Modifier
-                  .fillMaxWidth()
-                  .height(54.dp)
-                  .background(color = MaterialTheme.colorScheme.primaryContainer)
-              )
-            }
-        ){ innerpading ->
+        Scaffold{ innerpading ->
             NavHost(navController, startDestination = AppRoutes.Splash.getRoute(),
                 modifier = Modifier.padding(innerpading),
                 enterTransition = {
@@ -120,7 +112,9 @@ fun AppNavigation(){
                     )
                 ){ backStackEntry->
                     val id = backStackEntry.arguments?.getInt(AppRoutes.BookDetails.BOOK_ID)?:0
-                    BookDetails(id)
+                    BookDetails(id){
+                        navController.popBackStack()
+                    }
 
                 }
 

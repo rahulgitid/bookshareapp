@@ -1,5 +1,6 @@
 package com.bksapp.bookshare.ui.bookdetail
 
+import androidx.compose.runtime.MutableIntState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bksapp.bookshare.data.local.entity.Book
@@ -21,6 +22,11 @@ class BookDetailViewModel @Inject constructor(
     private val _bookState = MutableStateFlow<NetworkStatus<Book>>(NetworkStatus.Idle)
            val bookState = _bookState.asStateFlow()
 
+
+    private val _cartUpdate = MutableStateFlow<Int>(0)
+    val cartUpdate = _cartUpdate.asStateFlow()
+
+
     fun getBook(id: Int){
         _bookState.value = NetworkStatus.Loading
         viewModelScope.launch {
@@ -29,5 +35,9 @@ class BookDetailViewModel @Inject constructor(
                 _bookState.value = NetworkStatus.Success(book)
             }
         }
+    }
+
+    fun addToCart(){
+        _cartUpdate.value++
     }
 }
