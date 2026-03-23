@@ -6,13 +6,16 @@ private const val SPLASH_ROUTE = "splash"
 private const val LOGIN_ROUTE = "login"
 private const val SIGNUP_ROUTE = "signup"
 private const val HOME_ROUTE = "home"
-private const val BOOK_DETAIL = "bookdetail"
+private const val BOOK_DETAIL = "bookDetail"
+
+private const val CART_ROUTE = "cartScreen"
 
 enum class TitleName {
     Splash,
     Login,
     Home,
-    Detail
+    Detail,
+    Cart
 }
 sealed class AppRoutes{
 
@@ -58,6 +61,12 @@ sealed class AppRoutes{
             return BOOK_DETAIL
         }
     }
+
+    object Cart: AppRoutes(){
+        fun getRoute(): String{
+            return CART_ROUTE
+        }
+    }
 }
 
 
@@ -74,6 +83,7 @@ fun getTitleForRoute(route: String): String{
         LOGIN_ROUTE-> TitleName.Login.name
         HOME_ROUTE-> TitleName.Home.name
         BOOK_DETAIL -> TitleName.Detail.name
+        CART_ROUTE-> TitleName.Cart.name
         else -> ""
 
     }

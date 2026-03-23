@@ -1,5 +1,6 @@
 package com.bksapp.bookshare.ui.bookdetail.component
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -15,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.ui.theme.BackgroundDark
 
 @Composable
-fun BottomButton(addToCart: () -> Unit){
-    Button("Add to cart",
+fun BottomButton(isInCart:()->Boolean,addToCart: () -> Unit){
+    if(!isInCart())Button("Add to cart",
         btColor = BackgroundDark,
         addToCart)
 

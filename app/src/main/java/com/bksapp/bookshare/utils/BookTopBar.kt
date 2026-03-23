@@ -28,8 +28,9 @@ fun BookTopBar(title: String,
                backButton: Boolean = false,
                isSearch:Boolean = false,
                isCart:Boolean = false,
-               backAction:()->Unit,
-               cartCount:()->Int){
+               backAction:()->Unit = {},
+               cartClick:()->Unit = {},
+               cartCount:()->Int = {0}){
 
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +60,7 @@ fun BookTopBar(title: String,
                         }
 
                 }) {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = cartClick) {
                         Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = "Back")
                     }
                 }

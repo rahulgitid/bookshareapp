@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bksapp.bookshare.ui.bookdetail.BookDetails
+import com.bksapp.bookshare.ui.cart.CartScreen
 import com.bksapp.bookshare.ui.dashboard.HomeScreen
 import com.bksapp.bookshare.ui.login.LoginEvent
 import com.bksapp.bookshare.ui.login.LoginScreen
@@ -112,10 +113,19 @@ fun AppNavigation(){
                     )
                 ){ backStackEntry->
                     val id = backStackEntry.arguments?.getInt(AppRoutes.BookDetails.BOOK_ID)?:0
-                    BookDetails(id){
+                    BookDetails(id,{
+                        navController.navigate(AppRoutes.Cart.getRoute()){
+                            launchSingleTop = true
+                        }
+                    }){
                         navController.popBackStack()
                     }
+                }
 
+                composable(route = AppRoutes.Cart.getRoute()) {
+                    CartScreen{
+                        navController.popBackStack()
+                    }
                 }
 
 

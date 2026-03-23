@@ -36,9 +36,10 @@ import com.bksapp.bookshare.utils.localBook
 
 
 @Composable
-fun BookDetails(bookID: Int,goBack:()->Unit) {
+fun BookDetails(bookID: Int,goCart:()->Unit,goBack:()->Unit) {
     val bookDetailViewModel = hiltViewModel<BookDetailViewModel>()
     val bookState: NetworkStatus<Book> by bookDetailViewModel.bookState.collectAsStateWithLifecycle()
+    val isInCart  by bookDetailViewModel.isInCart.collectAsStateWithLifecycle()
 
     val cartState by bookDetailViewModel.cartUpdate.collectAsStateWithLifecycle()
 
@@ -59,7 +60,7 @@ fun BookDetails(bookID: Int,goBack:()->Unit) {
         } else if (bookState is NetworkStatus.Success) {
             val book = (bookState as NetworkStatus.Success<Book>).data
             CompositionLocalProvider(localBook provides book) {
-                BookView(goBack, {cartState},{bookDetailViewModel.addToCart()})
+                BookView({isInCart},goBack, {cartState},{bookDetailViewModel.addToCart(book)},goCart)
             }
         }
     }
@@ -68,11 +69,11 @@ fun BookDetails(bookID: Int,goBack:()->Unit) {
 
 
 @Composable
-fun BookView(goBack:()->Unit,itemCount:()->Int,addToCart: ()->Unit) {
+fun BookView(isInCart:()-> Boolean,goBack:()->Unit, itemCount:()->Int, addToCart: ()->Unit, goCart:()->Unit) {
     Column(modifier = Modifier
         .fillMaxSize()) {
         BookTopBar("Book Details", isCart = true, backButton = true,
-            backAction = goBack, cartCount = itemCount)
+            backAction = goBack, cartCount = itemCount, cartClick = goCart)
         Column(modifier = Modifier
             .weight(1f)
             .padding(20.dp)) {
@@ -107,7 +108,7 @@ fun BookView(goBack:()->Unit,itemCount:()->Int,addToCart: ()->Unit) {
             .padding(top = 10.dp, bottom = 10.dp),
             horizontalArrangement = Arrangement.Absolute.SpaceAround,
             verticalAlignment = Alignment.CenterVertically) {
-               BottomButton(addToCart)
+               BottomButton(isInCart,addToCart)
              }
     }
 
