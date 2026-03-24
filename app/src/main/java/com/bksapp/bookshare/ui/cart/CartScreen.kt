@@ -40,17 +40,17 @@ import com.bksapp.bookshare.utils.ImageLoader
 @Composable
 fun CartScreen(
     cartViewModel: CartViewModel = hiltViewModel(),
-    goback: () -> Unit,
+    goback: () -> Unit
 ) {
 
-    val cartState by cartViewModel.cartState.collectAsStateWithLifecycle()
+    val cartUIState by cartViewModel.cartState.collectAsStateWithLifecycle()
     Column {
         BookTopBar(title= "Cart",
             backButton = true,
             backAction = goback)
         LazyColumn {
-            items(cartState, key = { it.id }, contentType = {}) { book ->
-                CartItem(book)
+            items(cartUIState.itemsList, key = { it.id }, contentType = {"Cart_Item"}) { book ->
+                CartItem(book,{cartViewModel.removeCartItem(it)})
             }
         }
     }
@@ -58,7 +58,7 @@ fun CartScreen(
 
 
 @Composable
-fun CartItem(book: Book) {
+fun CartItem(book: Book,remove:(Int)->Unit) {
     Card(modifier = Modifier
         .padding(8.dp),
         colors = CardDefaults.cardColors(
@@ -95,7 +95,7 @@ fun CartItem(book: Book) {
                             )
                             IconButton(modifier = Modifier
                                 .size(18.dp),
-                                onClick = {}) { Icon(Icons.Filled.Delete, "delete") }
+                                onClick = {remove(book.id)}) { Icon(Icons.Filled.Delete, "delete") }
                         }
                         Spacer(modifier= Modifier.height(4.dp))
                         Text(
