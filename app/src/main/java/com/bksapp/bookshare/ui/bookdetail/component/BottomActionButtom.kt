@@ -17,25 +17,26 @@ import com.bksapp.bookshare.ui.theme.BackgroundDark
 
 @Composable
 fun BottomButton(isInCart:()->Boolean,addToCart: () -> Unit){
-    if(!isInCart())Button("Add to cart",
+    val  modifier = Modifier
+        .width(140.dp)
+        .height(42.dp)
+    if(!isInCart())Button(modifier,"Add to cart",
         btColor = BackgroundDark,
         addToCart)
 
-    Button("Buy Now",
+    Button(modifier,"Buy Now",
         btColor = MaterialTheme.colorScheme.primary,
         {})
 
 }
 
 @Composable
-fun Button(text:String,
+fun Button(modifier : Modifier,text:String,
            btColor: Color = MaterialTheme.colorScheme.primary,
            clickAction: ()->Unit){
 
     FilledTonalButton(onClick = clickAction,
-        modifier = Modifier
-            .width(140.dp)
-            .height(42.dp),
+        modifier,
         contentPadding = PaddingValues(4.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = btColor

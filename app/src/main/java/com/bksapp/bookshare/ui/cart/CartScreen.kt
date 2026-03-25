@@ -1,6 +1,5 @@
 package com.bksapp.bookshare.ui.cart
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
@@ -33,9 +31,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bksapp.bookshare.R
 import com.bksapp.bookshare.data.local.entity.Book
+import com.bksapp.bookshare.ui.cart.cartComponents.CouponCode
+import com.bksapp.bookshare.ui.cart.cartComponents.ItemTotal
 import com.bksapp.bookshare.ui.theme.PrimaryLight
 import com.bksapp.bookshare.utils.BookTopBar
 import com.bksapp.bookshare.utils.ImageLoader
+import com.bksapp.bookshare.utils.Stepper
 
 @Composable
 fun CartScreen(
@@ -44,23 +45,46 @@ fun CartScreen(
 ) {
 
     val cartUIState by cartViewModel.cartState.collectAsStateWithLifecycle()
+
     Column {
         BookTopBar(title= "Cart",
             backButton = true,
             backAction = goback)
         LazyColumn {
-            items(cartUIState.itemsList, key = { it.id }, contentType = {"Cart_Item"}) { book ->
-                CartItem(book,{cartViewModel.removeCartItem(it)})
-            }
-        }
+                  items(cartUIState.itemsList, key = { it.id }, contentType = {"Cart_Item"}) { book ->
+                    CartItem(
+                        book = book,
+                        remove = { cartViewModel.removeCartItem(it) },
+                        plus = {
+                            cartViewModel.plusQuantity(book)
+                        }, minus = {
+                            cartViewModel.minusQuantity(book)
+                        },
+                        qunatity = {book.cartQuantity})
+                  }
+
+                item {  Spacer(modifier = Modifier.height(8.dp)) }
+                item {  CouponCode() }
+                item {   ItemTotal(
+                    items = cartUIState.itemInCarts,
+                    total = cartUIState.total,
+                    shipping = cartUIState.shipping) }
+                }
+
+
+
+
+
+
+
     }
 }
 
 
 @Composable
-fun CartItem(book: Book,remove:(Int)->Unit) {
+fun CartItem(book: Book,remove:(Int)->Unit,plus:()->Unit,minus:()->Unit,qunatity:()->Int) {
     Card(modifier = Modifier
-        .padding(8.dp),
+        .padding(top=8.dp,start = 8.dp, end = 8.dp, bottom = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = PrimaryLight
         )) {
@@ -106,13 +130,19 @@ fun CartItem(book: Book,remove:(Int)->Unit) {
                         )
                     }
 
-                    Text(modifier = Modifier.align(Alignment.BottomStart),
-                        text = stringResource(R.string.rupee, book.price),
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(modifier = Modifier.align(Alignment.BottomStart)) {
+                        Text(modifier = Modifier
+                                .weight(1f),
+                            text = stringResource(R.string.rupee, book.price),
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Stepper(plus,minus,qunatity)
+
+                    }
                 }
             }
         }

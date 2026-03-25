@@ -16,7 +16,8 @@ data class Book(
     val publisher: String,
     val pages: Int,
     val published: String,
-    val language: String
+    val language: String,
+    val cartQuantity: Int = 0
 )
 
 

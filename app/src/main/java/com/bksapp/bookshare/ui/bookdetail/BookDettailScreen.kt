@@ -43,9 +43,9 @@ fun BookDetails(bookID: Int,goCart:()->Unit,goBack:()->Unit) {
 
     val cartState by bookDetailViewModel.cartUpdate.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
+ /*   LaunchedEffect(Unit) {
         bookDetailViewModel.getBook(bookID)
-    }
+    }*/
 
     Box(
         modifier = Modifier
