@@ -30,7 +30,7 @@ import com.bksapp.bookshare.ui.theme.AppTheme
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AppNavigation(){
-    val animationTime = 200
+    val animationTime = 300
     val navController = rememberNavController()
     AppTheme {
         Scaffold{ innerpading ->

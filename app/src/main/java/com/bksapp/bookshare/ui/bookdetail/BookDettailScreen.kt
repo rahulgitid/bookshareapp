@@ -40,10 +40,9 @@ fun BookDetails(bookID: Int,goCart:()->Unit,goBack:()->Unit) {
     val bookDetailViewModel = hiltViewModel<BookDetailViewModel>()
     val bookState: NetworkStatus<Book> by bookDetailViewModel.bookState.collectAsStateWithLifecycle()
     val isInCart  by bookDetailViewModel.isInCart.collectAsStateWithLifecycle()
+    val cartCountState by bookDetailViewModel.cartCount.collectAsStateWithLifecycle()
 
-    val cartState by bookDetailViewModel.cartUpdate.collectAsStateWithLifecycle()
-
- /*   LaunchedEffect(Unit) {
+   /* LaunchedEffect(Unit) {
         bookDetailViewModel.getBook(bookID)
     }*/
 
@@ -60,7 +59,7 @@ fun BookDetails(bookID: Int,goCart:()->Unit,goBack:()->Unit) {
         } else if (bookState is NetworkStatus.Success) {
             val book = (bookState as NetworkStatus.Success<Book>).data
             CompositionLocalProvider(localBook provides book) {
-                BookView({isInCart},goBack, {cartState},{bookDetailViewModel.addToCart(book)},goCart)
+                BookView({isInCart},goBack, {cartCountState},{bookDetailViewModel.addToCart(book)},goCart)
             }
         }
     }

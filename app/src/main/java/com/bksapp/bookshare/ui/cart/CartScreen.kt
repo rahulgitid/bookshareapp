@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
@@ -20,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
@@ -50,17 +53,18 @@ fun CartScreen(
         BookTopBar(title= "Cart",
             backButton = true,
             backAction = goback)
-        LazyColumn {
+        LazyColumn{
                   items(cartUIState.itemsList, key = { it.id }, contentType = {"Cart_Item"}) { book ->
                     CartItem(
+                        modifier = Modifier.animateItem(),
                         book = book,
                         remove = { cartViewModel.removeCartItem(it) },
                         plus = {
-                            cartViewModel.plusQuantity(book)
+                             cartViewModel.plusQuantity(book)
                         }, minus = {
                             cartViewModel.minusQuantity(book)
                         },
-                        qunatity = {book.cartQuantity})
+                        quantity = {book.cartQuantity})
                   }
 
                 item {  Spacer(modifier = Modifier.height(8.dp)) }
@@ -71,19 +75,13 @@ fun CartScreen(
                     shipping = cartUIState.shipping) }
                 }
 
-
-
-
-
-
-
     }
 }
 
 
 @Composable
-fun CartItem(book: Book,remove:(Int)->Unit,plus:()->Unit,minus:()->Unit,qunatity:()->Int) {
-    Card(modifier = Modifier
+fun CartItem(modifier: Modifier,book: Book,remove:(Int)->Unit,plus:()->Unit,minus:()->Unit,quantity:()->Int) {
+    Card(modifier
         .padding(top=8.dp,start = 8.dp, end = 8.dp, bottom = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = PrimaryLight
@@ -140,7 +138,7 @@ fun CartItem(book: Book,remove:(Int)->Unit,plus:()->Unit,minus:()->Unit,qunatity
                             fontWeight = FontWeight.Bold
                         )
 
-                        Stepper(plus,minus,qunatity)
+                        Stepper(plus,minus,quantity)
 
                     }
                 }
