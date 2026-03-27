@@ -44,7 +44,8 @@ import com.bksapp.bookshare.utils.Stepper
 @Composable
 fun CartScreen(
     cartViewModel: CartViewModel = hiltViewModel(),
-    goback: () -> Unit
+    goToOrder:()->Unit,
+    goback: () -> Unit,
 ) {
 
     val cartUIState by cartViewModel.cartState.collectAsStateWithLifecycle()
@@ -69,13 +70,17 @@ fun CartScreen(
 
                 item {  Spacer(modifier = Modifier.height(8.dp)) }
                 item {  CouponCode() }
-                item {   ItemTotal(
+                item {
+                    ItemTotal(
                     items = cartUIState.itemInCarts,
                     total = cartUIState.total,
-                    shipping = cartUIState.shipping) }
+                    shipping = cartUIState.shipping,
+                        goToOrder)
+                    }
+                 }
                 }
 
-    }
+
 }
 
 

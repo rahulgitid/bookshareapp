@@ -10,12 +10,15 @@ private const val BOOK_DETAIL = "bookDetail"
 
 private const val CART_ROUTE = "cartScreen"
 
+private const val CONFIRM_ORDER = "confirmOrder"
+
 enum class TitleName {
     Splash,
     Login,
     Home,
     Detail,
-    Cart
+    Cart,
+    ConfirmOrder
 }
 sealed class AppRoutes{
 
@@ -67,11 +70,16 @@ sealed class AppRoutes{
             return CART_ROUTE
         }
     }
+
+    object ConfirmOrder : AppRoutes(){
+        fun getRoute(): String{
+            return CONFIRM_ORDER
+        }
+    }
 }
 
 
 fun getTitleForRoute(route: String): String{
-    Log.i("routeadfdsgfghfd","$route")
 
     var currentRoute = route
 
@@ -84,6 +92,7 @@ fun getTitleForRoute(route: String): String{
         HOME_ROUTE-> TitleName.Home.name
         BOOK_DETAIL -> TitleName.Detail.name
         CART_ROUTE-> TitleName.Cart.name
+        CONFIRM_ORDER-> TitleName.ConfirmOrder.name
         else -> ""
 
     }

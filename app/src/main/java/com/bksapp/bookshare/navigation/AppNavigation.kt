@@ -23,6 +23,7 @@ import com.bksapp.bookshare.ui.cart.CartScreen
 import com.bksapp.bookshare.ui.dashboard.HomeScreen
 import com.bksapp.bookshare.ui.login.LoginEvent
 import com.bksapp.bookshare.ui.login.LoginScreen
+import com.bksapp.bookshare.ui.orderconfirm.ConfirmOrderScreen
 import com.bksapp.bookshare.ui.signup.SignUpScreen
 import com.bksapp.bookshare.ui.splash.SplashScreen
 import com.bksapp.bookshare.ui.theme.AppTheme
@@ -123,7 +124,17 @@ fun AppNavigation(){
                 }
 
                 composable(route = AppRoutes.Cart.getRoute()) {
-                    CartScreen{
+                    CartScreen(goToOrder = {
+                        navController.navigate(AppRoutes.ConfirmOrder.getRoute())
+                    }){
+                        navController.popBackStack()
+                    }
+                }
+
+                composable(
+                    route = AppRoutes.ConfirmOrder.getRoute()
+                ) {
+                    ConfirmOrderScreen(){
                         navController.popBackStack()
                     }
                 }

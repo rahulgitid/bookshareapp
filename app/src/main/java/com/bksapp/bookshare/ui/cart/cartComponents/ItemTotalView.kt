@@ -26,7 +26,7 @@ import com.bksapp.bookshare.ui.bookdetail.component.Button
 import com.bksapp.bookshare.ui.theme.Background
 
 @Composable
-fun ItemTotal(items:Int,total:Int,shipping: Int){
+fun ItemTotal(items:Int,total:Int,shipping: Int,goToOrder:()->Unit){
     val styleType = MaterialTheme.typography.titleSmall
     Card (modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
@@ -124,7 +124,7 @@ fun ItemTotal(items:Int,total:Int,shipping: Int){
             Button(
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 text = "Proceed To Checkout"
-            ) {}
+            ) {goToOrder()}
 
             Spacer(modifier = Modifier.height(10.dp))
         }
