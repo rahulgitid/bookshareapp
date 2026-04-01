@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.bksapp.bookshare.ui.address.AddressScreen
 import com.bksapp.bookshare.ui.bookdetail.BookDetails
 import com.bksapp.bookshare.ui.cart.CartScreen
 import com.bksapp.bookshare.ui.dashboard.HomeScreen
@@ -134,12 +135,18 @@ fun AppNavigation(){
                 composable(
                     route = AppRoutes.ConfirmOrder.getRoute()
                 ) {
-                    ConfirmOrderScreen(){
+                    ConfirmOrderScreen(goToAddress = {
+                         navController.navigate(AppRoutes.Address.getRoute())
+                    }){
                         navController.popBackStack()
                     }
                 }
 
-
+                 composable(
+                     route = AppRoutes.Address.getRoute()
+                 ) {
+                     AddressScreen()
+                 }
 
             }
         }

@@ -76,16 +76,15 @@ fun OrderItem(book: Book) {
                     )
                 }
 
-                Row(modifier = Modifier.align(Alignment.BottomStart)) {
-                    Text(modifier = Modifier
-                        .weight(1f),
+                Column (modifier = Modifier.align(Alignment.BottomStart)) {
+                    Text(modifier = Modifier,
                         text = stringResource(R.string.rupee, book.price),
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.Bold
                     )
-
+                    Text(text="Qty: ${book.cartQuantity}", style = MaterialTheme.typography.titleSmall)
 
 
                 }

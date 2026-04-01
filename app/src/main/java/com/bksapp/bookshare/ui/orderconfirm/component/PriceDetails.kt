@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.R
 
 @Composable
-fun PriceDetails(){
+fun PriceDetails(getSubTotal : ()->Int,getShipping:()->Int){
 
     Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
         Column(modifier = Modifier
@@ -37,7 +37,7 @@ fun PriceDetails(){
                     .weight(1f),
                     text = "SubTotal",
                     style = MaterialTheme.typography.titleSmall)
-                Text(text = stringResource(R.string.rupee,1000),
+                Text(text = stringResource(R.string.rupee,getSubTotal()),
                     style = MaterialTheme.typography.titleSmall)
 
             }
@@ -48,7 +48,7 @@ fun PriceDetails(){
                     text = "Shipping",
                     style = MaterialTheme.typography.titleSmall)
                 Text(
-                    text = stringResource(R.string.rupee,180),
+                    text = stringResource(R.string.rupee,getShipping()),
                     style = MaterialTheme.typography.titleSmall)
 
             }
@@ -63,7 +63,7 @@ fun PriceDetails(){
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = stringResource(R.string.rupee,180),
+                    text = stringResource(R.string.rupee,getSubTotal()+getShipping()),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold)
 

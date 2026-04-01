@@ -35,6 +35,7 @@ import com.bksapp.bookshare.utils.BookTopBar
 
 @Composable
 fun ConfirmOrderScreen(cartViewModel: CartViewModel = hiltViewModel(),
+        goToAddress: ()->Unit,
         goback:()->Unit){
     val cartUIState by cartViewModel.cartState.collectAsStateWithLifecycle()
     Column {
@@ -47,7 +48,7 @@ fun ConfirmOrderScreen(cartViewModel: CartViewModel = hiltViewModel(),
             modifier = Modifier
                 .padding(start = 14.dp, end = 14.dp)
         ) {
-            item { DeliveryTo() }
+            item { DeliveryTo(goToAddress) }
             item { ItemSpacer() }
             item {
                 Card(
@@ -87,9 +88,9 @@ fun ConfirmOrderScreen(cartViewModel: CartViewModel = hiltViewModel(),
             item { ItemSpacer() }
             item { PaymentMethod() }
             item { ItemSpacer() }
-            item { PriceDetails() }
+            item { PriceDetails({cartUIState.total},{cartUIState.shipping}) }
             item { ItemSpacer() }
-            item { OrderConfirmBottom() }
+            item { OrderConfirmBottom({cartUIState.total},{cartUIState.shipping}) }
         }
     }
 

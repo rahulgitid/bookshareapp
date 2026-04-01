@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 class CartRepositoryImpl @Inject constructor():CartRepository {
 
     private val _cartItemState = MutableStateFlow<List<Book>>(emptyList())
-    override  suspend fun cartItems(): Flow<List<Book>> = _cartItemState.asStateFlow()
+    override  suspend fun cartItems() = _cartItemState.asStateFlow()
 
 
     override suspend fun addItemToCart(book: Book, quantity: Int) {

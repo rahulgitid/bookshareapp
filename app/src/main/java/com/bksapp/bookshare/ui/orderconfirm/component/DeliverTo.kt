@@ -1,5 +1,6 @@
 package com.bksapp.bookshare.ui.orderconfirm.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,7 @@ import com.bksapp.bookshare.utils.ImageLoader
 import com.bksapp.bookshare.utils.Stepper
 
 @Composable
-fun DeliveryTo(){
+fun DeliveryTo(goToAddress: ()->Unit){
 
     Card(
         modifier = Modifier.padding(top = 10.dp),
@@ -73,7 +74,8 @@ fun DeliveryTo(){
                     Text(text = "Address", style = MaterialTheme.typography.titleSmall)
                 }
 
-                Text(
+                Text(modifier = Modifier
+                    .clickable(onClick = goToAddress),
                     text = "Change",
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Blue

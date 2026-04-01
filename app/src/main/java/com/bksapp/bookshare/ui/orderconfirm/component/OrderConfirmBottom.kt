@@ -24,14 +24,14 @@ import com.bksapp.bookshare.ui.bookdetail.component.Button
 import com.bksapp.bookshare.ui.cart.CartViewModel
 
 @Composable
-fun OrderConfirmBottom(){
+fun OrderConfirmBottom(getSubTotal : ()->Int,getShipping:()->Int){
     Card(colors = CardDefaults.cardColors(Color.White)) {
         Box(modifier = Modifier
             .fillMaxWidth().padding(10.dp)) {
             Column {
                 Text(text = "Total", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = stringResource(R.string.rupee,2500),
+                Text(text = stringResource(R.string.rupee,getSubTotal()+getShipping()),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold)
             }

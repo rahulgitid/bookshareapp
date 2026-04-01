@@ -38,7 +38,7 @@ fun BookTopBar(title: String,
                     .bottomShadow(
 
                     )
-                    .background(Color.White) // The background must be applied after the shadow modifier
+                    .background(Color(0xB9FFFFFF))
                     .padding(16.dp)
             ) {
                 if (backButton) IconButton(

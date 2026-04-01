@@ -66,7 +66,8 @@ fun PaymentMethod() {
                     Text(modifier = Modifier
                         .weight(1f),
                         text = "CCAvenue",
-                        style = MaterialTheme.typography.titleMedium)
+                        style = MaterialTheme.typography.titleMedium,
+                        color = if (isSelected == 1) Color.White else Color.Black)
                     if (isSelected == 1)Icon(imageVector = Icons.Filled.CheckCircle,
                         contentDescription = "Check_It",
                         Modifier.size(32.dp).padding(end = 8.dp),
@@ -96,7 +97,8 @@ fun PaymentMethod() {
                     Text(modifier = Modifier
                         .weight(1f),
                         text = "Razorpay",
-                        style = MaterialTheme.typography.titleMedium)
+                        style = MaterialTheme.typography.titleMedium,
+                        color = if (isSelected == 2) Color.White else Color.Black )
                     if (isSelected == 2)Icon(
                         imageVector = Icons.Filled.CheckCircle,
                         contentDescription = "Check_It",
