@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bksapp.bookshare.ui.address.components.AddressItem
 import com.bksapp.bookshare.ui.bookdetail.component.Button
 import com.bksapp.bookshare.ui.theme.Primary
 import com.bksapp.bookshare.utils.TextFieldWithSpinner
@@ -73,6 +74,7 @@ fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel()){
 
     var isSheetShow by remember { mutableStateOf(false) }
     val addressValidationState by addressViewModel.addressValidation.collectAsStateWithLifecycle()
+    val hideSheet by addressViewModel.hideSheet.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val state = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -94,8 +96,7 @@ fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel()){
             .padding(24.dp)){
             LazyColumn {
                 items(addressData,key={it.zipCode}, contentType = {""}){address->
-
-                    Text(text=address.address)
+                    AddressItem(address)
                 }
             }
             FloatingActionButton(modifier = Modifier
@@ -109,8 +110,10 @@ fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel()){
 
     }
 
-        AddressBottomSheet({nameState},{scrollState},{state},{sheetHeight},{isSheetShow},addressValidationState,{
-            addressViewModel.setAddress(it)}){
+        AddressBottomSheet({nameState},{scrollState},{state},{sheetHeight},{isSheetShow},addressValidationState,
+            {
+                addressViewModel.setAddress(it)
+            }){
             addressViewModel.resetAddress()
             isSheetShow = isSheetShow.not()
         }
@@ -128,7 +131,7 @@ fun AddressBottomSheet(
     sheetHeight:()-> Dp,
     isSheetShow: ()->Boolean,
     addressValidationState: AddressUIState,
-    sendAddress: (Address)->Unit,
+    sendAddress: (Address)-> Boolean,
     onDismiss:()->Unit){
 
 
@@ -167,7 +170,7 @@ fun AddressSpacer(){
 @Composable
 fun AddressUI(
     uiState: AddressUIState,
-    sendAddress: (Address)->Unit,
+    sendAddress: (Address)-> Boolean,
     cancelSheet: ()->Unit){
 
     val name = rememberTextFieldState()
@@ -253,8 +256,7 @@ fun AddressUI(
                 Modifier.weight(0.45f),
                 text = "Save Address",
                 clickAction =  {
-                    sendAddress(
-                        Address(
+                    if(sendAddress(Address(
                             name.text as String,
                             address.text as String,
                         selectCountry.text as String,
@@ -262,8 +264,9 @@ fun AddressUI(
                         selectCity.text as String,
                         zipCode.text as String,
                         landMark.text as String
-                    )
-                       )
+                    ))){
+                        cancelSheet()
+                    }
                 })
         }
     }

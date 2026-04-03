@@ -53,7 +53,8 @@ data class Address(
     val state: String="",
     val city: String="",
     val zipCode: String="",
-    val landMark: String=""
+    val landMark: String="",
+    val isDefault:Boolean = false
 )
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
@@ -62,12 +63,14 @@ class AddressViewModel @Inject constructor(
 ) : ViewModel() {
     private val _addressValidation = MutableStateFlow(AddressUIState())
     val addressValidation = _addressValidation.asStateFlow()
+    private val _hideSheet = MutableStateFlow(false)
+    val hideSheet = _hideSheet.asStateFlow()
 
 
 val addressState = addressRepo.getNewAddress()
     fun setAddress(
          newAddress:Address
-    ){
+    ): Boolean{
         val addressUIState = AddressUIState(
                 validName = newAddress.name.isNotEmpty(),
                 nameMessage = if(newAddress.name.isNotEmpty()) "" else ValidAddressMessage.Name.msg,
@@ -95,12 +98,17 @@ val addressState = addressRepo.getNewAddress()
             && addressUIState.validZipCode
             && addressUIState.validLandMark){
             viewModelScope.launch {
-
-                addressRepo.setAddress(newAddress)
+                if(addressRepo.getNewAddress().value.isEmpty()){
+                    addressRepo.setAddress(newAddress.copy(isDefault = true))
+                }
+                else {
+                    addressRepo.setAddress(newAddress)
+                }
             }
+            return true
         }
 
-
+    return false
  }
 
     fun resetAddress(){

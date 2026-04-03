@@ -29,13 +29,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.R
 import com.bksapp.bookshare.data.local.entity.Book
+import com.bksapp.bookshare.ui.address.Address
 import com.bksapp.bookshare.ui.theme.Primary
 import com.bksapp.bookshare.ui.theme.PrimaryLight
 import com.bksapp.bookshare.utils.ImageLoader
 import com.bksapp.bookshare.utils.Stepper
 
 @Composable
-fun DeliveryTo(goToAddress: ()->Unit){
+fun DeliveryTo(address: Address, goToAddress: ()->Unit){
 
     Card(
         modifier = Modifier.padding(top = 10.dp),
@@ -66,12 +67,12 @@ fun DeliveryTo(goToAddress: ()->Unit){
                         .weight(1f)
                 ) {
                     Text(
-                        text = "Name",
+                        text = address.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "Address", style = MaterialTheme.typography.titleSmall)
+                    Text(text = "${address.address}\n ${address.city},${address.state},${address.zipCode}", style = MaterialTheme.typography.titleSmall)
                 }
 
                 Text(modifier = Modifier
