@@ -145,7 +145,9 @@ fun AppNavigation(){
                  composable(
                      route = AppRoutes.Address.getRoute()
                  ) {
-                     AddressScreen()
+                     AddressScreen{
+                         navController.popBackStack()
+                     }
                  }
 
             }

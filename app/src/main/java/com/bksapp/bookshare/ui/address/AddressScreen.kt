@@ -70,7 +70,7 @@ import com.bksapp.bookshare.utils.mpCities
 import dagger.hilt.android.lifecycle.HiltViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel()){
+fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel(),onBack:()->Unit){
 
     var isSheetShow by remember { mutableStateOf(false) }
     val addressValidationState by addressViewModel.addressValidation.collectAsStateWithLifecycle()
@@ -95,8 +95,12 @@ fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel()){
             .fillMaxSize()
             .padding(24.dp)){
             LazyColumn {
-                items(addressData,key={it.zipCode}, contentType = {""}){address->
-                    AddressItem(address)
+                items(addressData,key={it.id}, contentType = {""}){address->
+                    AddressItem({
+                        addressViewModel.setCurrentAddress(it)
+                        onBack()
+
+                     },address)
                 }
             }
             FloatingActionButton(modifier = Modifier
@@ -257,13 +261,13 @@ fun AddressUI(
                 text = "Save Address",
                 clickAction =  {
                     if(sendAddress(Address(
-                            name.text as String,
-                            address.text as String,
-                        selectCountry.text as String,
-                        selectState.text as String,
-                        selectCity.text as String,
-                        zipCode.text as String,
-                        landMark.text as String
+                            name=name.text as String,
+                            address = address.text as String,
+                        country = selectCountry.text as String,
+                        state = selectState.text as String,
+                        city = selectCity.text as String,
+                        zipCode = zipCode.text as String,
+                        landMark = landMark.text as String
                     ))){
                         cancelSheet()
                     }

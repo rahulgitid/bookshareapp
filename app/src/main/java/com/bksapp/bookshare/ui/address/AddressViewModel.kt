@@ -1,10 +1,12 @@
 package com.bksapp.bookshare.ui.address
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bksapp.bookshare.data.repository.AddressRepoImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 enum class ValidAddressMessage(val msg: String){
@@ -47,6 +50,7 @@ data class AddressUIState(
 
 
 data class Address(
+    val id:Int = 0,
     val name: String ="",
     val address: String="",
     val country: String="",
@@ -111,12 +115,17 @@ val addressState = addressRepo.getNewAddress()
     return false
  }
 
+    fun setCurrentAddress(address: Address){
+        viewModelScope.launch {
+            addressRepo.setCurrentAddress(address)
+
+        }
+    }
+
     fun resetAddress(){
         _addressValidation.update {
             AddressUIState()
         }
     }
-
-
 
 }

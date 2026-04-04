@@ -29,14 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AddressItem(address: Address){
+fun AddressItem(itemClicked:(address: Address)->Unit, address: Address){
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(bottom = 10.dp)
         .background(Color.White)){
         Card(modifier = Modifier
             .fillMaxWidth()
-            .clickable {}
+            .clickable {itemClicked(address)}
             .border(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(10.dp)

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -26,19 +27,20 @@ class ConfirmOrderViewModel @Inject constructor(
 
     private val triggerStart = MutableSharedFlow<Unit>(1)
 
-
     init {
         triggerStart.tryEmit(Unit)
     }
+
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val addressState = addressRepo.getNewAddress()
-        .map{
-               if(it.isNotEmpty())it[0] else Address()
-           }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(100),
-        Address()
-    )
+    val addressState = triggerStart.flatMapLatest {
+        addressRepo.makeCurrentAddress()
+    }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(500),
+            Address())
+
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val cartState = triggerStart.flatMapLatest {
@@ -56,7 +58,7 @@ class ConfirmOrderViewModel @Inject constructor(
 
     } .stateIn(
         viewModelScope,
-        SharingStarted.WhileSubscribed(100),
+        SharingStarted.WhileSubscribed(500),
         CartUIState()
     )
 
