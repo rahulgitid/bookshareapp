@@ -1,5 +1,7 @@
 package com.bksapp.bookshare.ui.splash
 
+import android.annotation.SuppressLint
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -16,12 +18,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.R
 import com.bksapp.bookshare.ui.theme.Primary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.time.delay
+
 
 
 @Composable
@@ -41,7 +46,7 @@ fun SplashScreen(goToMain : ()->Unit){
         modifier = Modifier
             .fillMaxSize()
             .drawBehind {
-                val topY = size.height * progress.value
+                val topY =  size.height * progress.value
                 drawRect(
                     color = Primary,
                     topLeft = Offset(0f, topY),
@@ -50,10 +55,9 @@ fun SplashScreen(goToMain : ()->Unit){
             }
     ) {
         Image(modifier = Modifier
-            .size(50.dp)
             .align(Alignment.Center),
             contentDescription = "",
-            painter = painterResource(R.drawable.ic_launcher_background)
+            painter = painterResource(R.mipmap.ic_launcher)
         )
     }
 

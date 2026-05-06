@@ -32,13 +32,13 @@ import com.bksapp.bookshare.ui.theme.AppTheme
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AppNavigation(){
-    val animationTime = 300
+    val animationTime = 200
     val navController = rememberNavController()
     AppTheme {
         Scaffold{ innerpading ->
-            NavHost(navController, startDestination = AppRoutes.Splash.getRoute(),
-                modifier = Modifier.padding(innerpading),
-                enterTransition = {
+            NavHost(
+                navController, startDestination = AppRoutes.Home.getRoute(),
+              /*  enterTransition = {
                     slideIntoContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Left,
                         animationSpec = tween(animationTime)
@@ -61,11 +61,12 @@ fun AppNavigation(){
                         towards = AnimatedContentTransitionScope.SlideDirection.Right,
                         animationSpec = tween(animationTime)
                     )
-                }
+                },*/
+                modifier = Modifier.padding(innerpading)
                 )
             {
 
-                composable(route = AppRoutes.Splash.getRoute()){
+               /* composable(route = AppRoutes.Splash.getRoute()){
                     SplashScreen {
                         navController.navigate(AppRoutes.Home.getRoute()){
                             popUpTo(AppRoutes.Splash.getRoute()){
@@ -76,7 +77,7 @@ fun AppNavigation(){
                         }
                     }
 
-                }
+                }*/
 
                 composable(
                     route = AppRoutes.Login.getRoute()

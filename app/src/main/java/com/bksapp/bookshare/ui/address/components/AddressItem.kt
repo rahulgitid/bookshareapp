@@ -50,16 +50,20 @@ fun AddressItem(itemClicked:(address: Address)->Unit, address: Address){
                     verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(modifier = Modifier.size(24.dp), selected = true, onClick = {})
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(modifier = Modifier
-                        .weight(1f),
+                    Text(
+                        modifier = Modifier
+                            .weight(1f),
                         text = address.name,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold)
-                    ElevatedAssistChip(
-                        modifier = Modifier.padding(2.dp),
-                        label = {Text(text = "Default")},
-                        onClick = {}
+                        fontWeight = FontWeight.Bold
                     )
+                    if (address.isDefault) {
+                        ElevatedAssistChip(
+                            modifier = Modifier.padding(2.dp),
+                            label = { Text(text = "Default") },
+                            onClick = {}
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))

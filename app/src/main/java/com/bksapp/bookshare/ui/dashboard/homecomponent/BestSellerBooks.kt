@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.R
 import com.bksapp.bookshare.data.local.entity.Book
@@ -36,11 +37,15 @@ import com.bksapp.bookshare.data.local.entity.BookList
 import com.bksapp.bookshare.ui.theme.Primary
 import com.bksapp.bookshare.utils.ImageLoader
 import com.bksapp.bookshare.utils.RatingBar
+import kotlin.div
 
 @Composable
 fun BestSellerBooks(list: BookList, clickEvent: (Int)->Unit){
     val books = list.items
     if(books.isEmpty())return
+
+    val width = LocalWindowInfo.current.containerDpSize.width
+    val itemSize = width/2-width/8
     Box {
         Box(
             modifier = Modifier
@@ -85,8 +90,8 @@ fun BestSellerBooks(list: BookList, clickEvent: (Int)->Unit){
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(books, key = { it.id }, contentType = { "seller_book" }) { book ->
-                    BestSellerComponent(book,clickEvent)
+                items(books, key = { it.id }) { book ->
+                    BestSellerComponent(itemSize,book,clickEvent)
                 }
             }
         }
@@ -95,23 +100,24 @@ fun BestSellerBooks(list: BookList, clickEvent: (Int)->Unit){
 
 
 @Composable
-fun BestSellerComponent(book: Book,clickEvent: (Int)->Unit){
+fun BestSellerComponent(itemSize: Dp, book: Book, clickEvent: (Int)->Unit){
 
-    BestSellerItem(book,clickEvent)
+    BestSellerItem(itemSize,book,clickEvent)
 
 }
 
 
 @Composable
-fun BestSellerItem(book: Book,clickEvent: (Int)->Unit){
-    val width = LocalWindowInfo.current.containerDpSize.width
+fun BestSellerItem(itemSize: Dp, book: Book, clickEvent: (Int)->Unit){
+
     Card(onClick = {clickEvent(book.id)},
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
     ){
+
         Column(modifier = Modifier
-            .width(width/2-width/8)
+            .width(itemSize)
             .padding(12.dp)) {
             Box(
                 modifier = Modifier

@@ -15,3 +15,6 @@ Signup Screen->
      4. DOB
 
 Login Screen-> email , password
+
+Home Screen -> show books
+Detail Screen-> Book details 

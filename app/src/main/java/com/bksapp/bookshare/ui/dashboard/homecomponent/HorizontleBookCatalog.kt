@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bksapp.bookshare.data.local.entity.Book
 import com.bksapp.bookshare.data.local.entity.BookList
@@ -39,12 +40,16 @@ import com.bksapp.bookshare.ui.theme.AppTypography
 import com.bksapp.bookshare.ui.theme.Primary
 import com.bksapp.bookshare.ui.theme.PrimaryLight
 import com.bksapp.bookshare.utils.ImageLoader
+import kotlin.div
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HorizontalBookCatalog(list: BookList, showBookDetail : (id : Int)->Unit){
     val books = list.items
     val customState = rememberLazyGridState()
+    val width = LocalWindowInfo.current.containerDpSize.width
+    val bookItemWidth = width-width/3-width/10
+    val itemImageBoxWidth = bookItemWidth/2
     Column(modifier = Modifier
         .background(
             brush = Brush.verticalGradient(
@@ -65,9 +70,8 @@ fun HorizontalBookCatalog(list: BookList, showBookDetail : (id : Int)->Unit){
     {
         itemsIndexed(
             items = books,
-            key = { _, item -> item.id },
-            contentType = { _, _ -> "book_content" }) { index, book ->
-            BookDesign(index, book, showBookDetail)
+            key = { _, item -> item.id }) { index, book ->
+            BookDesign(bookItemWidth,itemImageBoxWidth,index, book, showBookDetail)
         }
     }
 }
@@ -76,10 +80,10 @@ fun HorizontalBookCatalog(list: BookList, showBookDetail : (id : Int)->Unit){
 }
 
 @Composable
-fun BookDesign(bookNo: Int, book: Book,showBookDetail : (id : Int)->Unit){
-    val width = LocalWindowInfo.current.containerDpSize.width
+fun BookDesign(bookItemWidth: Dp, itemImageBoxWidth:Dp, bookNo: Int, book: Book, showBookDetail : (id : Int)->Unit){
+
     Card(
-        modifier = Modifier.width(width-width/3-width/10).wrapContentHeight(),
+        modifier = Modifier.width(bookItemWidth).wrapContentHeight(),
         onClick =  { showBookDetail(book.id) },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -93,7 +97,7 @@ fun BookDesign(bookNo: Int, book: Book,showBookDetail : (id : Int)->Unit){
                 style = MaterialTheme.typography.displaySmall,
                 fontFamily = FontFamily.SansSerif)
             Box(modifier = Modifier
-                .width(width/4)
+                .width(itemImageBoxWidth)
                 .height(150.dp)){
 
                 ImageLoader(book.cover,false, FilterQuality.Low)

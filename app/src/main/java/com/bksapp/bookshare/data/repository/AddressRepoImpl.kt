@@ -26,46 +26,31 @@ class AddressRepoImpl @Inject constructor() : AddressRepo {
 
 
     override suspend fun setAddress(newAddress: Address) {
-        val aID = idGenerator()
         withContext(Dispatchers.IO) {
+            val aID = idGenerator()
+            if (newAddress.isDefault) {
+                val resetList = inMemoryAddress.map { it.copy(isDefault = false) }
+                inMemoryAddress.clear()
+                inMemoryAddress.addAll(resetList)
+            }
+
             val updatedAddress = newAddress.copy(id = aID)
             inMemoryAddress.add(updatedAddress)
-           _addressStateFlow.update { currentList ->
-                currentList + updatedAddress
-            }
+            _addressStateFlow.update { inMemoryAddress.toList() }
         }
-
-
     }
 
     suspend fun setCurrentAddress(address: Address) {
         withContext(Dispatchers.IO) {
-                inMemoryAddress.remove(address)
-                val  updatedList = inMemoryAddress.toMutableList()
-                updatedList.add(0,address)
 
-
-            inMemoryAddress.clear()
-            inMemoryAddress.addAll(updatedList)
-            _addressStateFlow.value = updatedList
-        }
-    }
-
-    suspend fun makeDefault(aID:Int) {
-        withContext(Dispatchers.IO) {
-            val updatedList = inMemoryAddress.map { address ->
-                when {
-                    address.id == aID -> address.copy(isDefault = true)
-                    address.isDefault -> address.copy(isDefault = false)
-                    else -> address
-                }
+            inMemoryAddress.apply {
+                remove(address)
+                add(0,address)
+                _addressStateFlow.update { inMemoryAddress.toList() }
             }
-
-            inMemoryAddress.clear()
-            inMemoryAddress.addAll(updatedList)
-            _addressStateFlow.value = updatedList
         }
     }
+
 
     fun makeCurrentAddress():Flow<Address> = _addressStateFlow.map{list->
         list.firstOrNull()?: Address()

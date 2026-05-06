@@ -102,12 +102,8 @@ val addressState = addressRepo.getNewAddress()
             && addressUIState.validZipCode
             && addressUIState.validLandMark){
             viewModelScope.launch {
-                if(addressRepo.getNewAddress().value.isEmpty()){
-                    addressRepo.setAddress(newAddress.copy(isDefault = true))
-                }
-                else {
-                    addressRepo.setAddress(newAddress)
-                }
+                    addressRepo.setAddress(newAddress.copy())
+
             }
             return true
         }

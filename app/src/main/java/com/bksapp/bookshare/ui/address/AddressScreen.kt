@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bksapp.bookshare.ui.address.components.AddressItem
+import com.bksapp.bookshare.ui.address.components.DefaultAddress
 import com.bksapp.bookshare.ui.bookdetail.component.Button
 import com.bksapp.bookshare.ui.theme.Primary
 import com.bksapp.bookshare.utils.TextFieldWithSpinner
@@ -95,7 +96,7 @@ fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel(),onBack:()
             .fillMaxSize()
             .padding(24.dp)){
             LazyColumn {
-                items(addressData,key={it.id}, contentType = {""}){address->
+                items(addressData.sortedByDescending { it.isDefault },key={it.id}, contentType = {""}){address->
                     AddressItem({
                         addressViewModel.setCurrentAddress(it)
                         onBack()
@@ -184,6 +185,7 @@ fun AddressUI(
     val selectCity = rememberTextFieldState()
     val zipCode = rememberTextFieldState()
     val landMark = rememberTextFieldState()
+    var isDefaultCheced = false
     Column {
 
         Row(modifier = Modifier
@@ -247,6 +249,10 @@ fun AddressUI(
             leadingIcon = {Icon(Icons.Outlined.LocationOn, contentDescription = "Name", tint = Primary)}
         )
         AddressSpacer()
+        DefaultAddress{
+            isDefaultCheced = it
+        }
+        AddressSpacer()
         Row(modifier = Modifier
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -267,11 +273,14 @@ fun AddressUI(
                         state = selectState.text as String,
                         city = selectCity.text as String,
                         zipCode = zipCode.text as String,
-                        landMark = landMark.text as String
+                        landMark = landMark.text as String,
+                        isDefault = isDefaultCheced
                     ))){
                         cancelSheet()
                     }
                 })
         }
+
+
     }
 }

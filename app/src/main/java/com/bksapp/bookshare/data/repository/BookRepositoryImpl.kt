@@ -8,12 +8,12 @@ import javax.inject.Inject
 
 class BookRepositoryImpl @Inject constructor(): BookRepository {
     override suspend fun getBooks(): List<Book> {
-        delay(800)
+       // delay(800)
         return getAllBooks()
     }
 
     override suspend fun getBook(id: Int): Book {
-        delay(50)
+       // delay(50)
         return getBookById(id)
     }
 

@@ -7,6 +7,7 @@ import com.bksapp.bookshare.data.repository.NetworkStatus
 import com.bksapp.bookshare.domain.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -32,14 +33,19 @@ class HomeViewModel @Inject constructor(
             withContext(Dispatchers.IO)
             {
                  val books = bookRepo.getBooks()
+                val bookCats  = books.map { book->book.category }.distinct()
+                val allBooksData  = books.filter { it.id%2==0}
+                val carouselData = books.subList(0,7)
+                val bestSellerDataData  = books.subList(5,10)
+                delay(100)
                  _homeUIState.update{
                      it.copy(
                          isLoading = false,
                       error = null,
-                      bookCats  = books.map { book->book.category }.distinct(),
-                      allBooksData  = books.filter { it.id%2==0},
-                      carouselData = books.subList(0,7),
-                      bestSellerDataData  = books.subList(5,10)
+                      bookCats  = bookCats,
+                      allBooksData  = allBooksData,
+                      carouselData =carouselData,
+                      bestSellerDataData  = bestSellerDataData
                      )
                  }
              }
