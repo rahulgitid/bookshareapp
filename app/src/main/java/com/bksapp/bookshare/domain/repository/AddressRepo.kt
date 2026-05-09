@@ -9,4 +9,5 @@ val inMemoryAddress = ArrayList<Address>()
 interface AddressRepo {
 
     suspend fun setAddress(newAddress: Address)
+    fun isAddressAvailable():Boolean
 }

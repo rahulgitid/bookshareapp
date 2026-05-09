@@ -4,7 +4,9 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bksapp.bookshare.data.local.entity.Book
+import com.bksapp.bookshare.data.repository.AddressRepoImpl
 import com.bksapp.bookshare.data.repository.CartRepositoryImpl
+import com.bksapp.bookshare.domain.repository.AddressRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,7 +28,8 @@ data class CartUIState(
 )
 @HiltViewModel
 class CartViewModel @Inject constructor(
-    private val cartRepo : CartRepositoryImpl
+    private val cartRepo : CartRepositoryImpl,
+    private val addressRepo: AddressRepoImpl
 ): ViewModel() {
 
     private val triggerStart = MutableSharedFlow<Unit>(1)
@@ -59,5 +62,9 @@ class CartViewModel @Inject constructor(
      fun plusQuantity(book: Book)= viewModelScope.launch {  cartRepo.addItemToCart(book, 1) }
 
      fun minusQuantity(book: Book)= viewModelScope.launch { cartRepo.addItemToCart(book,-1) }
+
+    fun isAddressAvailable():Boolean{
+        return addressRepo.isAddressAvailable()
+    }
 
 }

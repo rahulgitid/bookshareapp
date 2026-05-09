@@ -40,6 +40,10 @@ class AddressRepoImpl @Inject constructor() : AddressRepo {
         }
     }
 
+    override fun isAddressAvailable(): Boolean {
+        return inMemoryAddress.isNotEmpty()
+    }
+
     suspend fun setCurrentAddress(address: Address) {
         withContext(Dispatchers.IO) {
 

@@ -64,6 +64,7 @@ import com.bksapp.bookshare.ui.address.components.AddressItem
 import com.bksapp.bookshare.ui.address.components.DefaultAddress
 import com.bksapp.bookshare.ui.bookdetail.component.Button
 import com.bksapp.bookshare.ui.theme.Primary
+import com.bksapp.bookshare.utils.BookTopBar
 import com.bksapp.bookshare.utils.TextFieldWithSpinner
 import com.bksapp.bookshare.utils.countryList
 import com.bksapp.bookshare.utils.indiaStates
@@ -93,18 +94,27 @@ fun AddressScreen(addressViewModel: AddressViewModel = hiltViewModel(),onBack:()
     }
 
         Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)){
-            LazyColumn {
-                items(addressData.sortedByDescending { it.isDefault },key={it.id}, contentType = {""}){address->
-                    AddressItem({
-                        addressViewModel.setCurrentAddress(it)
-                        onBack()
+            .fillMaxSize()){
+            Column {
+                BookTopBar(
+                    title = "Delivery Address",
+                    backButton = true,
+                    backAction = onBack
+                )
+                LazyColumn(modifier = Modifier
+                    .padding(24.dp)) {
+                    items(addressData.sortedByDescending { it.isDefault },key={it.id}, contentType = {""}){address->
+                        AddressItem({
+                            addressViewModel.setCurrentAddress(it)
+                            onBack()
 
-                     },address)
+                        },address)
+                    }
                 }
             }
+
             FloatingActionButton(modifier = Modifier
+                .padding(24.dp)
                 .align(Alignment.BottomEnd),
                 onClick = {
                     isSheetShow = isSheetShow.not()

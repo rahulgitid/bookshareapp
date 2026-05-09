@@ -126,9 +126,13 @@ fun AppNavigation(){
                 }
 
                 composable(route = AppRoutes.Cart.getRoute()) {
-                    CartScreen(goToOrder = {
-                        navController.navigate(AppRoutes.ConfirmOrder.getRoute())
-                    }){
+                    CartScreen(
+                        goToOrder = {
+                           navController.navigate(AppRoutes.ConfirmOrder.getRoute())
+                        },
+                        goToAddress = {
+                            navController.navigate(AppRoutes.Address.getRoute())
+                        }){
                         navController.popBackStack()
                     }
                 }

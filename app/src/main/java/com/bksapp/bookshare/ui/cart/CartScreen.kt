@@ -45,6 +45,7 @@ import com.bksapp.bookshare.utils.Stepper
 fun CartScreen(
     cartViewModel: CartViewModel = hiltViewModel(),
     goToOrder:()->Unit,
+    goToAddress: ()->Unit,
     goback: () -> Unit,
 ) {
 
@@ -75,7 +76,17 @@ fun CartScreen(
                     items = cartUIState.itemInCarts,
                     total = cartUIState.total,
                     shipping = cartUIState.shipping,
-                        goToOrder)
+                        clickToProceed = {
+                            if(cartViewModel.isAddressAvailable()){
+
+                                goToOrder()
+                            }
+                            else{
+
+                                goToAddress()
+                            }
+                         }
+                       )
                     }
                  }
                 }
